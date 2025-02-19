@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.10)
+project(AnchoredDS)
+
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "-fsanitize=undefined")
+set(CMAKE_CXX_FLAGS "-fsanitize=address")
+set(EXECUTABLE_OUTPUT_PATH "bin/")
+
+
+add_subdirectory(src/fista)
+add_subdirectory(src/graph)
+
+add_executable(${PROJECT_NAME} src/run/run.cpp)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE fista)
+target_link_libraries(${PROJECT_NAME} PRIVATE graph)

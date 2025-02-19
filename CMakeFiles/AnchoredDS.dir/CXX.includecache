@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/yingli/work/AnchoredDS/AnchoredDS/src/fista/fista.h
+../graph/graph.h
+/home/yingli/work/AnchoredDS/AnchoredDS/src/graph/graph.h
+
+/home/yingli/work/AnchoredDS/AnchoredDS/src/graph/graph.h
+vector
+-
+cstdio
+-
+
+/home/yingli/work/AnchoredDS/AnchoredDS/src/run/run.cpp
+../tools/getArgs.hpp
+/home/yingli/work/AnchoredDS/AnchoredDS/src/tools/getArgs.hpp
+../tools/utils.hpp
+/home/yingli/work/AnchoredDS/AnchoredDS/src/tools/utils.hpp
+../graph/graph.h
+/home/yingli/work/AnchoredDS/AnchoredDS/src/graph/graph.h
+../fista/fista.h
+/home/yingli/work/AnchoredDS/AnchoredDS/src/fista/fista.h
+cassert
+-
+cstdio
+-
+
+/home/yingli/work/AnchoredDS/AnchoredDS/src/tools/getArgs.hpp
+string
+-
+cstring
+-
+tuple
+-
+
+/home/yingli/work/AnchoredDS/AnchoredDS/src/tools/utils.hpp
+cstdio
+-
+
