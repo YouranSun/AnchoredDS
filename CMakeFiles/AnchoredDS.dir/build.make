@@ -81,6 +81,7 @@ bin/AnchoredDS: CMakeFiles/AnchoredDS.dir/src/run/run.cpp.o
 bin/AnchoredDS: CMakeFiles/AnchoredDS.dir/build.make
 bin/AnchoredDS: src/fista/libfista.a
 bin/AnchoredDS: src/graph/libgraph.a
+bin/AnchoredDS: src/nrcore/libnrcore.a
 bin/AnchoredDS: CMakeFiles/AnchoredDS.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable bin/AnchoredDS"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/AnchoredDS.dir/link.txt --verbose=$(VERBOSE)

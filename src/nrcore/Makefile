@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles/progress.marks
-	$(MAKE) -f CMakeFiles/Makefile2 all
+	cd /home/yingli/work/AnchoredDS/AnchoredDS && $(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles /home/yingli/work/AnchoredDS/AnchoredDS/src/nrcore/CMakeFiles/progress.marks
+	cd /home/yingli/work/AnchoredDS/AnchoredDS && $(MAKE) -f CMakeFiles/Makefile2 src/nrcore/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) -f CMakeFiles/Makefile2 clean
+	cd /home/yingli/work/AnchoredDS/AnchoredDS && $(MAKE) -f CMakeFiles/Makefile2 src/nrcore/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,97 +97,60 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /home/yingli/work/AnchoredDS/AnchoredDS && $(MAKE) -f CMakeFiles/Makefile2 src/nrcore/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /home/yingli/work/AnchoredDS/AnchoredDS && $(MAKE) -f CMakeFiles/Makefile2 src/nrcore/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/yingli/work/AnchoredDS/AnchoredDS && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
-#=============================================================================
-# Target rules for targets named AnchoredDS
+# Convenience name for target.
+src/nrcore/CMakeFiles/nrcore.dir/rule:
+	cd /home/yingli/work/AnchoredDS/AnchoredDS && $(MAKE) -f CMakeFiles/Makefile2 src/nrcore/CMakeFiles/nrcore.dir/rule
+.PHONY : src/nrcore/CMakeFiles/nrcore.dir/rule
 
-# Build rule for target.
-AnchoredDS: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 AnchoredDS
-.PHONY : AnchoredDS
+# Convenience name for target.
+nrcore: src/nrcore/CMakeFiles/nrcore.dir/rule
 
-# fast build rule for target.
-AnchoredDS/fast:
-	$(MAKE) -f CMakeFiles/AnchoredDS.dir/build.make CMakeFiles/AnchoredDS.dir/build
-.PHONY : AnchoredDS/fast
-
-#=============================================================================
-# Target rules for targets named fista
-
-# Build rule for target.
-fista: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 fista
-.PHONY : fista
-
-# fast build rule for target.
-fista/fast:
-	$(MAKE) -f src/fista/CMakeFiles/fista.dir/build.make src/fista/CMakeFiles/fista.dir/build
-.PHONY : fista/fast
-
-#=============================================================================
-# Target rules for targets named graph
-
-# Build rule for target.
-graph: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 graph
-.PHONY : graph
-
-# fast build rule for target.
-graph/fast:
-	$(MAKE) -f src/graph/CMakeFiles/graph.dir/build.make src/graph/CMakeFiles/graph.dir/build
-.PHONY : graph/fast
-
-#=============================================================================
-# Target rules for targets named nrcore
-
-# Build rule for target.
-nrcore: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 nrcore
 .PHONY : nrcore
 
 # fast build rule for target.
 nrcore/fast:
-	$(MAKE) -f src/nrcore/CMakeFiles/nrcore.dir/build.make src/nrcore/CMakeFiles/nrcore.dir/build
+	cd /home/yingli/work/AnchoredDS/AnchoredDS && $(MAKE) -f src/nrcore/CMakeFiles/nrcore.dir/build.make src/nrcore/CMakeFiles/nrcore.dir/build
 .PHONY : nrcore/fast
 
-src/run/run.o: src/run/run.cpp.o
+nrcore.o: nrcore.cpp.o
 
-.PHONY : src/run/run.o
+.PHONY : nrcore.o
 
 # target to build an object file
-src/run/run.cpp.o:
-	$(MAKE) -f CMakeFiles/AnchoredDS.dir/build.make CMakeFiles/AnchoredDS.dir/src/run/run.cpp.o
-.PHONY : src/run/run.cpp.o
+nrcore.cpp.o:
+	cd /home/yingli/work/AnchoredDS/AnchoredDS && $(MAKE) -f src/nrcore/CMakeFiles/nrcore.dir/build.make src/nrcore/CMakeFiles/nrcore.dir/nrcore.cpp.o
+.PHONY : nrcore.cpp.o
 
-src/run/run.i: src/run/run.cpp.i
+nrcore.i: nrcore.cpp.i
 
-.PHONY : src/run/run.i
+.PHONY : nrcore.i
 
 # target to preprocess a source file
-src/run/run.cpp.i:
-	$(MAKE) -f CMakeFiles/AnchoredDS.dir/build.make CMakeFiles/AnchoredDS.dir/src/run/run.cpp.i
-.PHONY : src/run/run.cpp.i
+nrcore.cpp.i:
+	cd /home/yingli/work/AnchoredDS/AnchoredDS && $(MAKE) -f src/nrcore/CMakeFiles/nrcore.dir/build.make src/nrcore/CMakeFiles/nrcore.dir/nrcore.cpp.i
+.PHONY : nrcore.cpp.i
 
-src/run/run.s: src/run/run.cpp.s
+nrcore.s: nrcore.cpp.s
 
-.PHONY : src/run/run.s
+.PHONY : nrcore.s
 
 # target to generate assembly for a file
-src/run/run.cpp.s:
-	$(MAKE) -f CMakeFiles/AnchoredDS.dir/build.make CMakeFiles/AnchoredDS.dir/src/run/run.cpp.s
-.PHONY : src/run/run.cpp.s
+nrcore.cpp.s:
+	cd /home/yingli/work/AnchoredDS/AnchoredDS && $(MAKE) -f src/nrcore/CMakeFiles/nrcore.dir/build.make src/nrcore/CMakeFiles/nrcore.dir/nrcore.cpp.s
+.PHONY : nrcore.cpp.s
 
 # Help Target
 help:
@@ -197,13 +160,10 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... AnchoredDS"
-	@echo "... fista"
-	@echo "... graph"
 	@echo "... nrcore"
-	@echo "... src/run/run.o"
-	@echo "... src/run/run.i"
-	@echo "... src/run/run.s"
+	@echo "... nrcore.o"
+	@echo "... nrcore.i"
+	@echo "... nrcore.s"
 .PHONY : help
 
 
@@ -215,6 +175,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/yingli/work/AnchoredDS/AnchoredDS && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

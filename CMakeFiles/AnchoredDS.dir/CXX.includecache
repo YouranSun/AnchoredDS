@@ -16,6 +16,10 @@ vector
 cstdio
 -
 
+/home/yingli/work/AnchoredDS/AnchoredDS/src/nrcore/nrcore.h
+../graph/graph.h
+/home/yingli/work/AnchoredDS/AnchoredDS/src/graph/graph.h
+
 /home/yingli/work/AnchoredDS/AnchoredDS/src/run/run.cpp
 ../tools/getArgs.hpp
 /home/yingli/work/AnchoredDS/AnchoredDS/src/tools/getArgs.hpp
@@ -25,6 +29,8 @@ cstdio
 /home/yingli/work/AnchoredDS/AnchoredDS/src/graph/graph.h
 ../fista/fista.h
 /home/yingli/work/AnchoredDS/AnchoredDS/src/fista/fista.h
+../nrcore/nrcore.h
+/home/yingli/work/AnchoredDS/AnchoredDS/src/nrcore/nrcore.h
 cassert
 -
 cstdio

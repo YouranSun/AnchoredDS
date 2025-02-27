@@ -7,3 +7,6 @@
 /home/yingli/work/AnchoredDS/AnchoredDS/src/graph/CMakeFiles/rebuild_cache.dir
 /home/yingli/work/AnchoredDS/AnchoredDS/src/graph/CMakeFiles/edit_cache.dir
 /home/yingli/work/AnchoredDS/AnchoredDS/src/graph/CMakeFiles/graph.dir
+/home/yingli/work/AnchoredDS/AnchoredDS/src/nrcore/CMakeFiles/rebuild_cache.dir
+/home/yingli/work/AnchoredDS/AnchoredDS/src/nrcore/CMakeFiles/edit_cache.dir
+/home/yingli/work/AnchoredDS/AnchoredDS/src/nrcore/CMakeFiles/nrcore.dir

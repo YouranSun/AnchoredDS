@@ -1,0 +1,1 @@
+./bin/AnchoredDS -g sample/sample_g.txt -r sample/sample_r.txt -a sample/sample_a.txt

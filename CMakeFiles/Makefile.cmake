@@ -13,6 +13,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeLists.txt"
   "src/fista/CMakeLists.txt"
   "src/graph/CMakeLists.txt"
+  "src/nrcore/CMakeLists.txt"
   "/usr/share/cmake-3.16/Modules/CMakeCInformation.cmake"
   "/usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake"
   "/usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake"
@@ -45,6 +46,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   "src/fista/CMakeFiles/CMakeDirectoryInformation.cmake"
   "src/graph/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "src/nrcore/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
@@ -52,4 +54,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/AnchoredDS.dir/DependInfo.cmake"
   "src/fista/CMakeFiles/fista.dir/DependInfo.cmake"
   "src/graph/CMakeFiles/graph.dir/DependInfo.cmake"
+  "src/nrcore/CMakeFiles/nrcore.dir/DependInfo.cmake"
   )

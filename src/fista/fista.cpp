@@ -104,7 +104,7 @@ void Fista::fista() {
     std::vector<double> a_proj_new((G -> m) * 2, 0);
 
     for (int t = 1; t <= T; ++t) {
-        eprintf("t = %d\n", t);
+        // eprintf("t = %d\n", t);
 
         calcR(a);
         int r_nmx = gradient(r_argmx);
@@ -119,7 +119,7 @@ void Fista::fista() {
 }
 
 void Fista::findDS() {
-    for (int u = 0; u < (G -> n); ++u) eprintf("%.3lf ", r[u]); eputs("");
+    // for (int u = 0; u < (G -> n); ++u) eprintf("%.3lf ", r[u]); eputs("");
     std::vector<int> ord(G -> n);
     for (int u = 0; u < (G -> n); ++u) ord[u] = u;
     std::sort(ord.begin(), ord.end(), [&](const int &u, const int &v) {
@@ -128,30 +128,31 @@ void Fista::findDS() {
         }
         return r[u] > r[v];
     });
-    for (int u = 0; u < (G -> n); ++u) eprintf("%d ", ord[u]); eputs("");
+    // for (int u = 0; u < (G -> n); ++u) eprintf("%d ", ord[u]); eputs("");
 
 
-    int best_edge = 0;
-    int cur_edge = 0;
-    int best_pos = 1;
+    best_f = 0, best_g = 1;
+    int cur_f = 0;
     std::vector<int> vis(G -> n, 0);
 
     for (int i = 0; i < (G -> n); ++i) {
         int u = ord[i];
         for (auto [v, e]: (G -> g)[u]) if (vis[v]){
-            eprintf("    u = %d v = %d w = %d\n", u, v, w[e >> 1]);
-            cur_edge += w[e >> 1];
+            // eprintf("    u = %d v = %d w = %d\n", u, v, w[e >> 1]);
+            cur_f += w[e >> 1];
         }
         vis[u] = true;
-        eprintf("cur_vertex = %d cur_edge = %d\n", i + 1, cur_edge);
-        if (i >= (int)(A -> size()) && 1ll * cur_edge * (best_pos) > best_edge * (i + 1)) {
-            best_pos = i + 1;
-            best_edge = cur_edge;
+        // eprintf("cur_vertex = %d cur_edge = %d\n", i + 1, cur_edge);
+        if (i >= (int)(A -> size()) && 1ll * cur_f * (best_g) > best_f * (i + 1)) {
+            best_g = i + 1;
+            best_f = cur_f;
         }
     }
 
-    ds = std::vector<int>(best_pos);
-    for (int i = 0; i < best_pos; ++i) {
+    best_rho = best_f / best_g;
+
+    ds = std::vector<int>(best_g);
+    for (int i = 0; i < best_g; ++i) {
         ds[i] = ord[i];
     }
 }

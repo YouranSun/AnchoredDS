@@ -1,0 +1,2 @@
+/usr/bin/ar qc libnrcore.a  CMakeFiles/nrcore.dir/nrcore.cpp.o
+/usr/bin/ranlib libnrcore.a

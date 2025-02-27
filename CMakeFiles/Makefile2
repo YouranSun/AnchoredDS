@@ -56,12 +56,14 @@ CMAKE_BINARY_DIR = /home/yingli/work/AnchoredDS/AnchoredDS
 all: CMakeFiles/AnchoredDS.dir/all
 all: src/fista/all
 all: src/graph/all
+all: src/nrcore/all
 
 .PHONY : all
 
 # The main recursive "preinstall" target.
 preinstall: src/fista/preinstall
 preinstall: src/graph/preinstall
+preinstall: src/nrcore/preinstall
 
 .PHONY : preinstall
 
@@ -69,6 +71,7 @@ preinstall: src/graph/preinstall
 clean: CMakeFiles/AnchoredDS.dir/clean
 clean: src/fista/clean
 clean: src/graph/clean
+clean: src/nrcore/clean
 
 .PHONY : clean
 
@@ -109,11 +112,30 @@ src/graph/clean: src/graph/CMakeFiles/graph.dir/clean
 .PHONY : src/graph/clean
 
 #=============================================================================
+# Directory level rules for directory src/nrcore
+
+# Recursive "all" directory target.
+src/nrcore/all: src/nrcore/CMakeFiles/nrcore.dir/all
+
+.PHONY : src/nrcore/all
+
+# Recursive "preinstall" directory target.
+src/nrcore/preinstall:
+
+.PHONY : src/nrcore/preinstall
+
+# Recursive "clean" directory target.
+src/nrcore/clean: src/nrcore/CMakeFiles/nrcore.dir/clean
+
+.PHONY : src/nrcore/clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/AnchoredDS.dir
 
 # All Build rule for target.
 CMakeFiles/AnchoredDS.dir/all: src/fista/CMakeFiles/fista.dir/all
 CMakeFiles/AnchoredDS.dir/all: src/graph/CMakeFiles/graph.dir/all
+CMakeFiles/AnchoredDS.dir/all: src/nrcore/CMakeFiles/nrcore.dir/all
 	$(MAKE) -f CMakeFiles/AnchoredDS.dir/build.make CMakeFiles/AnchoredDS.dir/depend
 	$(MAKE) -f CMakeFiles/AnchoredDS.dir/build.make CMakeFiles/AnchoredDS.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=1,2 "Built target AnchoredDS"
@@ -121,7 +143,7 @@ CMakeFiles/AnchoredDS.dir/all: src/graph/CMakeFiles/graph.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/AnchoredDS.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 8
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/AnchoredDS.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 0
 .PHONY : CMakeFiles/AnchoredDS.dir/rule
@@ -189,6 +211,33 @@ graph: src/graph/CMakeFiles/graph.dir/rule
 src/graph/CMakeFiles/graph.dir/clean:
 	$(MAKE) -f src/graph/CMakeFiles/graph.dir/build.make src/graph/CMakeFiles/graph.dir/clean
 .PHONY : src/graph/CMakeFiles/graph.dir/clean
+
+#=============================================================================
+# Target rules for target src/nrcore/CMakeFiles/nrcore.dir
+
+# All Build rule for target.
+src/nrcore/CMakeFiles/nrcore.dir/all:
+	$(MAKE) -f src/nrcore/CMakeFiles/nrcore.dir/build.make src/nrcore/CMakeFiles/nrcore.dir/depend
+	$(MAKE) -f src/nrcore/CMakeFiles/nrcore.dir/build.make src/nrcore/CMakeFiles/nrcore.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=7,8 "Built target nrcore"
+.PHONY : src/nrcore/CMakeFiles/nrcore.dir/all
+
+# Build rule for subdir invocation for target.
+src/nrcore/CMakeFiles/nrcore.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 src/nrcore/CMakeFiles/nrcore.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 0
+.PHONY : src/nrcore/CMakeFiles/nrcore.dir/rule
+
+# Convenience name for target.
+nrcore: src/nrcore/CMakeFiles/nrcore.dir/rule
+
+.PHONY : nrcore
+
+# clean rule for target.
+src/nrcore/CMakeFiles/nrcore.dir/clean:
+	$(MAKE) -f src/nrcore/CMakeFiles/nrcore.dir/build.make src/nrcore/CMakeFiles/nrcore.dir/clean
+.PHONY : src/nrcore/CMakeFiles/nrcore.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

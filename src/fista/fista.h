@@ -25,6 +25,10 @@ private:
     void project(std::vector<double> &a_proj) const;
 public:
 
+    int best_g;
+    int best_f;
+    double best_rho;
+
     Fista(const Graph *G_, const VertexSet *R_, const VertexSet *A_);
 
     void fista();
