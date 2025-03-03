@@ -54,14 +54,14 @@ CMAKE_BINARY_DIR = /home/yingli/work/AnchoredDS/AnchoredDS
 
 # The main recursive "all" target.
 all: CMakeFiles/AnchoredDS.dir/all
-all: src/fista/all
+all: src/solvers/all
 all: src/graph/all
 all: src/nrcore/all
 
 .PHONY : all
 
 # The main recursive "preinstall" target.
-preinstall: src/fista/preinstall
+preinstall: src/solvers/preinstall
 preinstall: src/graph/preinstall
 preinstall: src/nrcore/preinstall
 
@@ -69,29 +69,11 @@ preinstall: src/nrcore/preinstall
 
 # The main recursive "clean" target.
 clean: CMakeFiles/AnchoredDS.dir/clean
-clean: src/fista/clean
+clean: src/solvers/clean
 clean: src/graph/clean
 clean: src/nrcore/clean
 
 .PHONY : clean
-
-#=============================================================================
-# Directory level rules for directory src/fista
-
-# Recursive "all" directory target.
-src/fista/all: src/fista/CMakeFiles/fista.dir/all
-
-.PHONY : src/fista/all
-
-# Recursive "preinstall" directory target.
-src/fista/preinstall:
-
-.PHONY : src/fista/preinstall
-
-# Recursive "clean" directory target.
-src/fista/clean: src/fista/CMakeFiles/fista.dir/clean
-
-.PHONY : src/fista/clean
 
 #=============================================================================
 # Directory level rules for directory src/graph
@@ -130,10 +112,34 @@ src/nrcore/clean: src/nrcore/CMakeFiles/nrcore.dir/clean
 .PHONY : src/nrcore/clean
 
 #=============================================================================
+# Directory level rules for directory src/solvers
+
+# Recursive "all" directory target.
+src/solvers/all: src/solvers/CMakeFiles/fista.dir/all
+src/solvers/all: src/solvers/CMakeFiles/fdp.dir/all
+src/solvers/all: src/solvers/CMakeFiles/dssolver.dir/all
+
+.PHONY : src/solvers/all
+
+# Recursive "preinstall" directory target.
+src/solvers/preinstall:
+
+.PHONY : src/solvers/preinstall
+
+# Recursive "clean" directory target.
+src/solvers/clean: src/solvers/CMakeFiles/fista.dir/clean
+src/solvers/clean: src/solvers/CMakeFiles/fdp.dir/clean
+src/solvers/clean: src/solvers/CMakeFiles/dssolver.dir/clean
+
+.PHONY : src/solvers/clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/AnchoredDS.dir
 
 # All Build rule for target.
-CMakeFiles/AnchoredDS.dir/all: src/fista/CMakeFiles/fista.dir/all
+CMakeFiles/AnchoredDS.dir/all: src/solvers/CMakeFiles/fista.dir/all
+CMakeFiles/AnchoredDS.dir/all: src/solvers/CMakeFiles/fdp.dir/all
+CMakeFiles/AnchoredDS.dir/all: src/solvers/CMakeFiles/dssolver.dir/all
 CMakeFiles/AnchoredDS.dir/all: src/graph/CMakeFiles/graph.dir/all
 CMakeFiles/AnchoredDS.dir/all: src/nrcore/CMakeFiles/nrcore.dir/all
 	$(MAKE) -f CMakeFiles/AnchoredDS.dir/build.make CMakeFiles/AnchoredDS.dir/depend
@@ -143,7 +149,7 @@ CMakeFiles/AnchoredDS.dir/all: src/nrcore/CMakeFiles/nrcore.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/AnchoredDS.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 8
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 12
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/AnchoredDS.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 0
 .PHONY : CMakeFiles/AnchoredDS.dir/rule
@@ -159,31 +165,85 @@ CMakeFiles/AnchoredDS.dir/clean:
 .PHONY : CMakeFiles/AnchoredDS.dir/clean
 
 #=============================================================================
-# Target rules for target src/fista/CMakeFiles/fista.dir
+# Target rules for target src/solvers/CMakeFiles/fista.dir
 
 # All Build rule for target.
-src/fista/CMakeFiles/fista.dir/all:
-	$(MAKE) -f src/fista/CMakeFiles/fista.dir/build.make src/fista/CMakeFiles/fista.dir/depend
-	$(MAKE) -f src/fista/CMakeFiles/fista.dir/build.make src/fista/CMakeFiles/fista.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=3,4 "Built target fista"
-.PHONY : src/fista/CMakeFiles/fista.dir/all
+src/solvers/CMakeFiles/fista.dir/all: src/solvers/CMakeFiles/dssolver.dir/all
+	$(MAKE) -f src/solvers/CMakeFiles/fista.dir/build.make src/solvers/CMakeFiles/fista.dir/depend
+	$(MAKE) -f src/solvers/CMakeFiles/fista.dir/build.make src/solvers/CMakeFiles/fista.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=7,8 "Built target fista"
+.PHONY : src/solvers/CMakeFiles/fista.dir/all
 
 # Build rule for subdir invocation for target.
-src/fista/CMakeFiles/fista.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 src/fista/CMakeFiles/fista.dir/all
+src/solvers/CMakeFiles/fista.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 4
+	$(MAKE) -f CMakeFiles/Makefile2 src/solvers/CMakeFiles/fista.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 0
-.PHONY : src/fista/CMakeFiles/fista.dir/rule
+.PHONY : src/solvers/CMakeFiles/fista.dir/rule
 
 # Convenience name for target.
-fista: src/fista/CMakeFiles/fista.dir/rule
+fista: src/solvers/CMakeFiles/fista.dir/rule
 
 .PHONY : fista
 
 # clean rule for target.
-src/fista/CMakeFiles/fista.dir/clean:
-	$(MAKE) -f src/fista/CMakeFiles/fista.dir/build.make src/fista/CMakeFiles/fista.dir/clean
-.PHONY : src/fista/CMakeFiles/fista.dir/clean
+src/solvers/CMakeFiles/fista.dir/clean:
+	$(MAKE) -f src/solvers/CMakeFiles/fista.dir/build.make src/solvers/CMakeFiles/fista.dir/clean
+.PHONY : src/solvers/CMakeFiles/fista.dir/clean
+
+#=============================================================================
+# Target rules for target src/solvers/CMakeFiles/fdp.dir
+
+# All Build rule for target.
+src/solvers/CMakeFiles/fdp.dir/all: src/solvers/CMakeFiles/dssolver.dir/all
+	$(MAKE) -f src/solvers/CMakeFiles/fdp.dir/build.make src/solvers/CMakeFiles/fdp.dir/depend
+	$(MAKE) -f src/solvers/CMakeFiles/fdp.dir/build.make src/solvers/CMakeFiles/fdp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=5,6 "Built target fdp"
+.PHONY : src/solvers/CMakeFiles/fdp.dir/all
+
+# Build rule for subdir invocation for target.
+src/solvers/CMakeFiles/fdp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 4
+	$(MAKE) -f CMakeFiles/Makefile2 src/solvers/CMakeFiles/fdp.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 0
+.PHONY : src/solvers/CMakeFiles/fdp.dir/rule
+
+# Convenience name for target.
+fdp: src/solvers/CMakeFiles/fdp.dir/rule
+
+.PHONY : fdp
+
+# clean rule for target.
+src/solvers/CMakeFiles/fdp.dir/clean:
+	$(MAKE) -f src/solvers/CMakeFiles/fdp.dir/build.make src/solvers/CMakeFiles/fdp.dir/clean
+.PHONY : src/solvers/CMakeFiles/fdp.dir/clean
+
+#=============================================================================
+# Target rules for target src/solvers/CMakeFiles/dssolver.dir
+
+# All Build rule for target.
+src/solvers/CMakeFiles/dssolver.dir/all:
+	$(MAKE) -f src/solvers/CMakeFiles/dssolver.dir/build.make src/solvers/CMakeFiles/dssolver.dir/depend
+	$(MAKE) -f src/solvers/CMakeFiles/dssolver.dir/build.make src/solvers/CMakeFiles/dssolver.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=3,4 "Built target dssolver"
+.PHONY : src/solvers/CMakeFiles/dssolver.dir/all
+
+# Build rule for subdir invocation for target.
+src/solvers/CMakeFiles/dssolver.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 src/solvers/CMakeFiles/dssolver.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 0
+.PHONY : src/solvers/CMakeFiles/dssolver.dir/rule
+
+# Convenience name for target.
+dssolver: src/solvers/CMakeFiles/dssolver.dir/rule
+
+.PHONY : dssolver
+
+# clean rule for target.
+src/solvers/CMakeFiles/dssolver.dir/clean:
+	$(MAKE) -f src/solvers/CMakeFiles/dssolver.dir/build.make src/solvers/CMakeFiles/dssolver.dir/clean
+.PHONY : src/solvers/CMakeFiles/dssolver.dir/clean
 
 #=============================================================================
 # Target rules for target src/graph/CMakeFiles/graph.dir
@@ -192,7 +252,7 @@ src/fista/CMakeFiles/fista.dir/clean:
 src/graph/CMakeFiles/graph.dir/all:
 	$(MAKE) -f src/graph/CMakeFiles/graph.dir/build.make src/graph/CMakeFiles/graph.dir/depend
 	$(MAKE) -f src/graph/CMakeFiles/graph.dir/build.make src/graph/CMakeFiles/graph.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=5,6 "Built target graph"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=9,10 "Built target graph"
 .PHONY : src/graph/CMakeFiles/graph.dir/all
 
 # Build rule for subdir invocation for target.
@@ -219,7 +279,7 @@ src/graph/CMakeFiles/graph.dir/clean:
 src/nrcore/CMakeFiles/nrcore.dir/all:
 	$(MAKE) -f src/nrcore/CMakeFiles/nrcore.dir/build.make src/nrcore/CMakeFiles/nrcore.dir/depend
 	$(MAKE) -f src/nrcore/CMakeFiles/nrcore.dir/build.make src/nrcore/CMakeFiles/nrcore.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=7,8 "Built target nrcore"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=11,12 "Built target nrcore"
 .PHONY : src/nrcore/CMakeFiles/nrcore.dir/all
 
 # Build rule for subdir invocation for target.

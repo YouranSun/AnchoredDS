@@ -1,7 +1,8 @@
 #include "../tools/getArgs.hpp"
 #include "../tools/utils.hpp"
 #include "../graph/graph.h"
-#include "../fista/fista.h"
+#include "../solvers/fista.h"
+#include "../solvers/fdp.h"
 #include "../nrcore/nrcore.h"
 
 #include <cassert>
@@ -22,23 +23,42 @@ int main(int argc, char **argv) {
     VertexSet *R = read<VertexSet>(ac, "-r");
     VertexSet *A = read<VertexSet>(ac, "-a");
 
-    NRCore *C = new NRCore(G, R, A);
-    C -> nrCore();
+    bool use_core = ac.exist("-c");
 
-    eprintf("CORE GRAPH\tnew size = %d\n", G -> n);
+    assert(ac.exist("-d"));
+    std::string method = ac["-d"];
 
-    Fista *fista = new Fista(G, R, A);
-    fista -> solve();
+    if (use_core) {
+        NRCore *C = new NRCore(G, R, A);
+        C -> nrCore();
+
+        eprintf("CORE GRAPH\tnew size = %d\n", G -> n);
+
+        delete C;
+    }
+
+    DSSolver *solver = nullptr;
+
+    if (method == "FISTA") {
+        solver = new Fista(G, R, A);
+    }
+    else if (method == "FDP"){
+        solver = new FDP(G, R, A);
+    }
+    else {
+        assert(false);
+    }
     
-    printf("FISTA\tdensity = %lf\n", fista -> best_rho);
+    solver -> solve();
 
-    // for (auto u: (fista -> densestSubgraph())) {
-    //     printf("%d ", u);
-    // }
-    // puts("");
+    printf("SOLVER\tdensity = %.10lf\n", solver -> best_rho);
 
-    delete fista;
-    delete C;
+    for (auto u: (solver -> densestSubgraph())) {
+        printf("%d ", u);
+    }
+    puts("");
+
+    delete solver;
     delete A;
     delete R;
     delete G;

@@ -11,9 +11,9 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.16.3/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.16.3/CMakeSystem.cmake"
   "CMakeLists.txt"
-  "src/fista/CMakeLists.txt"
   "src/graph/CMakeLists.txt"
   "src/nrcore/CMakeLists.txt"
+  "src/solvers/CMakeLists.txt"
   "/usr/share/cmake-3.16/Modules/CMakeCInformation.cmake"
   "/usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake"
   "/usr/share/cmake-3.16/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake"
@@ -44,7 +44,7 @@ set(CMAKE_MAKEFILE_OUTPUTS
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
-  "src/fista/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "src/solvers/CMakeFiles/CMakeDirectoryInformation.cmake"
   "src/graph/CMakeFiles/CMakeDirectoryInformation.cmake"
   "src/nrcore/CMakeFiles/CMakeDirectoryInformation.cmake"
   )
@@ -52,7 +52,9 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/AnchoredDS.dir/DependInfo.cmake"
-  "src/fista/CMakeFiles/fista.dir/DependInfo.cmake"
+  "src/solvers/CMakeFiles/fista.dir/DependInfo.cmake"
+  "src/solvers/CMakeFiles/fdp.dir/DependInfo.cmake"
+  "src/solvers/CMakeFiles/dssolver.dir/DependInfo.cmake"
   "src/graph/CMakeFiles/graph.dir/DependInfo.cmake"
   "src/nrcore/CMakeFiles/nrcore.dir/DependInfo.cmake"
   )

@@ -1,4 +1,4 @@
-# Install script for directory: /home/yingli/work/AnchoredDS/AnchoredDS/src/fista
+# Install script for directory: /home/yingli/work/AnchoredDS/AnchoredDS/src/solvers
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

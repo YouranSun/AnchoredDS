@@ -1,0 +1,2 @@
+/usr/bin/ar qc libdssolver.a  CMakeFiles/dssolver.dir/dssolver.cpp.o
+/usr/bin/ranlib libdssolver.a

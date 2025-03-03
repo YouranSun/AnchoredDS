@@ -2,14 +2,10 @@
 #define FISTA_H
 
 #include "../graph/graph.h"
+#include "dssolver.h"
 
-class Fista {
+class Fista : public DSSolver{
 private:
-    const Graph *G;
-    const VertexSet *R;
-    const VertexSet *A;
-    std::vector<int> w;
-    std::vector<int> ds;
     
     int m_R; // number of edges with an edge in R
     int delta; // maximum vertex degree
@@ -17,7 +13,6 @@ private:
     std::vector<double> a;
     std::vector<double> r;
 
-    const int T = 15;
     void initSol();
     void calcR(const std::vector<double> &a);
     int gradient(std::vector<int> &r_argmx) const;
@@ -25,16 +20,12 @@ private:
     void project(std::vector<double> &a_proj) const;
 public:
 
-    int best_g;
-    int best_f;
-    double best_rho;
-
+    ~Fista() override;
     Fista(const Graph *G_, const VertexSet *R_, const VertexSet *A_);
 
     void fista();
-    void findDS();
-    void solve();
-    std::vector<int> densestSubgraph() const;
+    void findDS() override;
+    void solve() override;
 } ;
 
 #endif

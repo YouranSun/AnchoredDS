@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/yingli/work/AnchoredDS/AnchoredDS/src/fista/cmake_install.cmake")
+  include("/home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/cmake_install.cmake")
   include("/home/yingli/work/AnchoredDS/AnchoredDS/src/graph/cmake_install.cmake")
   include("/home/yingli/work/AnchoredDS/AnchoredDS/src/nrcore/cmake_install.cmake")
 

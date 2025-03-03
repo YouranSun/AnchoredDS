@@ -1,9 +1,15 @@
 #include "graph.h"
 #include "../tools/utils.hpp"
 
+#include <random>
+#include <algorithm>
+
 void Graph::init(int n_, int m_, std::vector<std::pair<int, int> > edges_) {
+
     n = n_, m = m_;
     edges = edges_;
+    std::mt19937 rnd(2226701);
+    shuffle(edges.begin(), edges.end(), rnd);
     
     g = std::vector<std::vector<std::pair<int, int> > > (n, std::vector<std::pair<int, int> >());
     for (int e = 0; e < m; ++e) {

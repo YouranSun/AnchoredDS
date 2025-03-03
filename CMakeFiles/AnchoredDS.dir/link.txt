@@ -1,1 +1,1 @@
-/usr/bin/c++  -fsanitize=address   CMakeFiles/AnchoredDS.dir/src/run/run.cpp.o  -o bin/AnchoredDS  src/fista/libfista.a src/graph/libgraph.a src/nrcore/libnrcore.a 
+/usr/bin/c++  -fsanitize=address   CMakeFiles/AnchoredDS.dir/src/run/run.cpp.o  -o bin/AnchoredDS  src/solvers/libdssolver.a src/solvers/libfista.a src/solvers/libfdp.a src/graph/libgraph.a src/nrcore/libnrcore.a src/solvers/libdssolver.a 

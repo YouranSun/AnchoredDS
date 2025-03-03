@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/yingli/work/AnchoredDS/AnchoredDS/src/fista/fista.cpp" "/home/yingli/work/AnchoredDS/AnchoredDS/src/fista/CMakeFiles/fista.dir/fista.cpp.o"
+  "/home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/dssolver.cpp" "/home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/CMakeFiles/dssolver.dir/dssolver.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/yingli/work/AnchoredDS/AnchoredDS/src/fista/fista.h
-../graph/graph.h
-/home/yingli/work/AnchoredDS/AnchoredDS/src/graph/graph.h
-
 /home/yingli/work/AnchoredDS/AnchoredDS/src/graph/graph.h
 vector
 -
@@ -27,14 +23,30 @@ cstdio
 /home/yingli/work/AnchoredDS/AnchoredDS/src/tools/utils.hpp
 ../graph/graph.h
 /home/yingli/work/AnchoredDS/AnchoredDS/src/graph/graph.h
-../fista/fista.h
-/home/yingli/work/AnchoredDS/AnchoredDS/src/fista/fista.h
+../solvers/fista.h
+/home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/fista.h
+../solvers/fdp.h
+/home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/fdp.h
 ../nrcore/nrcore.h
 /home/yingli/work/AnchoredDS/AnchoredDS/src/nrcore/nrcore.h
 cassert
 -
 cstdio
 -
+
+/home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/dssolver.h
+../graph/graph.h
+/home/yingli/work/AnchoredDS/AnchoredDS/src/graph/graph.h
+
+/home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/fdp.h
+dssolver.h
+/home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/dssolver.h
+
+/home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/fista.h
+../graph/graph.h
+/home/yingli/work/AnchoredDS/AnchoredDS/src/graph/graph.h
+dssolver.h
+/home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/dssolver.h
 
 /home/yingli/work/AnchoredDS/AnchoredDS/src/tools/getArgs.hpp
 string

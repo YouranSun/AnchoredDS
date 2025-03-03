@@ -133,8 +133,34 @@ fista: cmake_check_build_system
 
 # fast build rule for target.
 fista/fast:
-	$(MAKE) -f src/fista/CMakeFiles/fista.dir/build.make src/fista/CMakeFiles/fista.dir/build
+	$(MAKE) -f src/solvers/CMakeFiles/fista.dir/build.make src/solvers/CMakeFiles/fista.dir/build
 .PHONY : fista/fast
+
+#=============================================================================
+# Target rules for targets named fdp
+
+# Build rule for target.
+fdp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 fdp
+.PHONY : fdp
+
+# fast build rule for target.
+fdp/fast:
+	$(MAKE) -f src/solvers/CMakeFiles/fdp.dir/build.make src/solvers/CMakeFiles/fdp.dir/build
+.PHONY : fdp/fast
+
+#=============================================================================
+# Target rules for targets named dssolver
+
+# Build rule for target.
+dssolver: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 dssolver
+.PHONY : dssolver
+
+# fast build rule for target.
+dssolver/fast:
+	$(MAKE) -f src/solvers/CMakeFiles/dssolver.dir/build.make src/solvers/CMakeFiles/dssolver.dir/build
+.PHONY : dssolver/fast
 
 #=============================================================================
 # Target rules for targets named graph
@@ -199,6 +225,8 @@ help:
 	@echo "... edit_cache"
 	@echo "... AnchoredDS"
 	@echo "... fista"
+	@echo "... fdp"
+	@echo "... dssolver"
 	@echo "... graph"
 	@echo "... nrcore"
 	@echo "... src/run/run.o"

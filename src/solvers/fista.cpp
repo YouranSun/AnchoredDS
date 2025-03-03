@@ -6,12 +6,14 @@
 #include <cassert>
 #include <tuple>
 
-Fista::Fista(const Graph *G_, const VertexSet *R_, const VertexSet *A_) : G(G_), R(R_), A(A_) {
+Fista::~Fista(){}
+
+Fista::Fista(const Graph *G_, const VertexSet *R_, const VertexSet *A_) : DSSolver(G_, R_, A_) {
     m_R = 0;
     w = std::vector<int>(G -> m);
     for (int e = 0; e < (G -> m); ++e) {
         int u = (G -> edges)[e].first;
-        int v = (G -> edges)[e].first;
+        int v = (G -> edges)[e].second;
         w[e] = (R -> in)[u] + (R -> in)[v];
         m_R += w[e];
     }
@@ -130,26 +132,33 @@ void Fista::findDS() {
     });
     // for (int u = 0; u < (G -> n); ++u) eprintf("%d ", ord[u]); eputs("");
 
-
-    best_f = 0, best_g = 1;
-    int cur_f = 0;
-    std::vector<int> vis(G -> n, 0);
-
-    for (int i = 0; i < (G -> n); ++i) {
-        int u = ord[i];
-        for (auto [v, e]: (G -> g)[u]) if (vis[v]){
-            // eprintf("    u = %d v = %d w = %d\n", u, v, w[e >> 1]);
-            cur_f += w[e >> 1];
+    std::vector<int> level((G -> n), 0);
+    for(int i = 0; i < ord.size(); i++) level[ord[i]] = i;
+    
+    std::vector<int> rPava((G -> n), 0);
+    for (int i = 0; i < (G -> m); ++i) {
+        auto e = (G -> edges)[i];
+        if(level[e.first] > level[e.second]) {
+            rPava[level[e.first]] += w[i];
         }
-        vis[u] = true;
-        // eprintf("cur_vertex = %d cur_edge = %d\n", i + 1, cur_edge);
-        if (i >= (int)(A -> size()) && 1ll * cur_f * (best_g) > best_f * (i + 1)) {
+        else {
+            rPava[level[e.second]] += w[i];
+        }
+    }
+    
+    int cur_f = 0;
+    best_rho = 0;
+    best_g = 0;
+
+    for (int i = 0; i < ord.size(); ++i) {
+        cur_f += rPava[i];
+    
+        if ((double)cur_f / (i + 1) >= best_rho) {
+            best_rho = (double)cur_f / (i + 1);
             best_g = i + 1;
             best_f = cur_f;
         }
     }
-
-    best_rho = best_f / best_g;
 
     ds = std::vector<int>(best_g);
     for (int i = 0; i < best_g; ++i) {
@@ -157,11 +166,7 @@ void Fista::findDS() {
     }
 }
 
-void Fista::solve(){
+void Fista::solve() {
     fista();
     findDS();
-}
-
-std::vector<int> Fista::densestSubgraph() const {
-    return ds;
 }
