@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named generator
+
+# Build rule for target.
+generator: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 generator
+.PHONY : generator
+
+# fast build rule for target.
+generator/fast:
+	$(MAKE) -f CMakeFiles/generator.dir/build.make CMakeFiles/generator.dir/build
+.PHONY : generator/fast
+
+#=============================================================================
 # Target rules for targets named AnchoredDS
 
 # Build rule for target.
@@ -188,6 +201,33 @@ nrcore/fast:
 	$(MAKE) -f src/nrcore/CMakeFiles/nrcore.dir/build.make src/nrcore/CMakeFiles/nrcore.dir/build
 .PHONY : nrcore/fast
 
+src/run/generator.o: src/run/generator.cpp.o
+
+.PHONY : src/run/generator.o
+
+# target to build an object file
+src/run/generator.cpp.o:
+	$(MAKE) -f CMakeFiles/generator.dir/build.make CMakeFiles/generator.dir/src/run/generator.cpp.o
+.PHONY : src/run/generator.cpp.o
+
+src/run/generator.i: src/run/generator.cpp.i
+
+.PHONY : src/run/generator.i
+
+# target to preprocess a source file
+src/run/generator.cpp.i:
+	$(MAKE) -f CMakeFiles/generator.dir/build.make CMakeFiles/generator.dir/src/run/generator.cpp.i
+.PHONY : src/run/generator.cpp.i
+
+src/run/generator.s: src/run/generator.cpp.s
+
+.PHONY : src/run/generator.s
+
+# target to generate assembly for a file
+src/run/generator.cpp.s:
+	$(MAKE) -f CMakeFiles/generator.dir/build.make CMakeFiles/generator.dir/src/run/generator.cpp.s
+.PHONY : src/run/generator.cpp.s
+
 src/run/run.o: src/run/run.cpp.o
 
 .PHONY : src/run/run.o
@@ -223,12 +263,16 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... generator"
 	@echo "... AnchoredDS"
 	@echo "... fista"
 	@echo "... fdp"
 	@echo "... dssolver"
 	@echo "... graph"
 	@echo "... nrcore"
+	@echo "... src/run/generator.o"
+	@echo "... src/run/generator.i"
+	@echo "... src/run/generator.s"
 	@echo "... src/run/run.o"
 	@echo "... src/run/run.i"
 	@echo "... src/run/run.s"

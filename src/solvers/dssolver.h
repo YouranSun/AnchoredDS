@@ -13,7 +13,7 @@ protected:
     std::vector<int> ds;
 
 public:
-    const int T = 15;
+    const int T = 64;
 
     int best_g;
     int best_f;

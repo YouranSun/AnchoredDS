@@ -4,5 +4,6 @@
 src/nrcore/CMakeFiles/nrcore.dir/nrcore.cpp.o: src/graph/graph.h
 src/nrcore/CMakeFiles/nrcore.dir/nrcore.cpp.o: src/nrcore/nrcore.cpp
 src/nrcore/CMakeFiles/nrcore.dir/nrcore.cpp.o: src/nrcore/nrcore.h
+src/nrcore/CMakeFiles/nrcore.dir/nrcore.cpp.o: src/tools/getArgs.hpp
 src/nrcore/CMakeFiles/nrcore.dir/nrcore.cpp.o: src/tools/utils.hpp
 

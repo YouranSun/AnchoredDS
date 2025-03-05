@@ -5,5 +5,6 @@ src/solvers/CMakeFiles/fdp.dir/fdp.cpp.o: src/graph/graph.h
 src/solvers/CMakeFiles/fdp.dir/fdp.cpp.o: src/solvers/dssolver.h
 src/solvers/CMakeFiles/fdp.dir/fdp.cpp.o: src/solvers/fdp.cpp
 src/solvers/CMakeFiles/fdp.dir/fdp.cpp.o: src/solvers/fdp.h
+src/solvers/CMakeFiles/fdp.dir/fdp.cpp.o: src/tools/getArgs.hpp
 src/solvers/CMakeFiles/fdp.dir/fdp.cpp.o: src/tools/utils.hpp
 

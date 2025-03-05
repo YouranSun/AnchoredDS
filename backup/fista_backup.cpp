@@ -36,9 +36,8 @@ Fista::Fista(const Graph *G_, const VertexSet *R_, const VertexSet *A_) : DSSolv
         delta = std::max(delta, (int)(G -> g)[u].size());
     }
 
-    // alpha = 0.25 / (((A -> size()) + 1) * sqrt(1ll * m_R * delta));
-    alpha = 1.0 / (8 * ((A -> size()) + 1) * sqrt(1ll * m_R * delta));
-    eprintf("FISTA\talpha = %lf\n", alpha);
+    alpha = 0.25 / (((A -> size()) + 1) * sqrt(1ll * m_R * delta));
+    // alpha = 0.125 / (((A -> size()) + 1) * sqrt(1ll * m_R * delta));
     // alpha = 0.25 / ((A -> size()) + 1);
     // eprintf("m_R = %d\n", m_R);
     // alpha = 1.0 / (2 * sqrt(m_R));
@@ -48,10 +47,10 @@ void Fista::initSol() {
     a = std::vector<double>((G -> m) * 2, 0);
     r = std::vector<double>(G -> n, 0);
 
-    for (int e = 0; e < (G -> m); ++e) {
-        a[e << 1] += w[e] * 0.5;
-        a[e << 1 | 1] += w[e] * 0.5;
-    }
+    // for (int e = 0; e < (G -> m); ++e) {
+    //     a[e << 1] += w[e] * 0.5;
+    //     a[e << 1 | 1] += w[e] * 0.5;
+    // }
 
     // NRCore *c = new NRCore(G, R, A);
     // for (int e = 0; e < (G -> m); ++e) {
@@ -64,6 +63,7 @@ void Fista::initSol() {
     //         a[e << 1 | 1] = w[e];
     //     }
     // }
+
     // delete c;
 }
 
@@ -99,16 +99,13 @@ int Fista::gradient(std::vector<int> &r_argmx) const {
 void Fista::descent(const std::vector<int> &r_argmx,
                     const int &r_nmx,
                     std::vector<double> &a_desc) const {
-    static double alpha_cur = alpha * 50;
-    alpha_cur = std::max(alpha_cur * pow(1.0 / 50, 1.0 / (T * 0.5)), alpha);
-    eprintf("FISTA\talpha_cur = %lf\n", alpha_cur);
     double r_mx = r[r_argmx[0]];
     double g = 1.0 / r_nmx;
     // a_desc = a;
     for (int u = 0; u < (G -> n); ++u) {
         double d = 2 * ((!(A -> in)[u]) + (r[u] == r_mx) * (int)(A -> size()) * g) * r[u];
         for (auto [v, e]: (G -> g)[u]) {
-            a_desc[e] -= alpha_cur * d;
+            a_desc[e] -= alpha * d;
         }
     }
     return;

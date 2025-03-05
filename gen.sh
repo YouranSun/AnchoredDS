@@ -1,0 +1,1 @@
+./bin/generator -g sample/com-lj.ungraph.txt -a sample/com-lj.ungraph-a.txt -r sample/com-lj.ungraph-r.txt

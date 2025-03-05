@@ -53,6 +53,7 @@ CMAKE_BINARY_DIR = /home/yingli/work/AnchoredDS/AnchoredDS
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
+all: CMakeFiles/generator.dir/all
 all: CMakeFiles/AnchoredDS.dir/all
 all: src/solvers/all
 all: src/graph/all
@@ -68,6 +69,7 @@ preinstall: src/nrcore/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
+clean: CMakeFiles/generator.dir/clean
 clean: CMakeFiles/AnchoredDS.dir/clean
 clean: src/solvers/clean
 clean: src/graph/clean
@@ -132,6 +134,33 @@ src/solvers/clean: src/solvers/CMakeFiles/fdp.dir/clean
 src/solvers/clean: src/solvers/CMakeFiles/dssolver.dir/clean
 
 .PHONY : src/solvers/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/generator.dir
+
+# All Build rule for target.
+CMakeFiles/generator.dir/all: src/graph/CMakeFiles/graph.dir/all
+	$(MAKE) -f CMakeFiles/generator.dir/build.make CMakeFiles/generator.dir/depend
+	$(MAKE) -f CMakeFiles/generator.dir/build.make CMakeFiles/generator.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=9,10 "Built target generator"
+.PHONY : CMakeFiles/generator.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/generator.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 4
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/generator.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles 0
+.PHONY : CMakeFiles/generator.dir/rule
+
+# Convenience name for target.
+generator: CMakeFiles/generator.dir/rule
+
+.PHONY : generator
+
+# clean rule for target.
+CMakeFiles/generator.dir/clean:
+	$(MAKE) -f CMakeFiles/generator.dir/build.make CMakeFiles/generator.dir/clean
+.PHONY : CMakeFiles/generator.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/AnchoredDS.dir
@@ -252,7 +281,7 @@ src/solvers/CMakeFiles/dssolver.dir/clean:
 src/graph/CMakeFiles/graph.dir/all:
 	$(MAKE) -f src/graph/CMakeFiles/graph.dir/build.make src/graph/CMakeFiles/graph.dir/depend
 	$(MAKE) -f src/graph/CMakeFiles/graph.dir/build.make src/graph/CMakeFiles/graph.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=9,10 "Built target graph"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=11,12 "Built target graph"
 .PHONY : src/graph/CMakeFiles/graph.dir/all
 
 # Build rule for subdir invocation for target.
@@ -279,7 +308,7 @@ src/graph/CMakeFiles/graph.dir/clean:
 src/nrcore/CMakeFiles/nrcore.dir/all:
 	$(MAKE) -f src/nrcore/CMakeFiles/nrcore.dir/build.make src/nrcore/CMakeFiles/nrcore.dir/depend
 	$(MAKE) -f src/nrcore/CMakeFiles/nrcore.dir/build.make src/nrcore/CMakeFiles/nrcore.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=11,12 "Built target nrcore"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/yingli/work/AnchoredDS/AnchoredDS/CMakeFiles --progress-num=13,14 "Built target nrcore"
 .PHONY : src/nrcore/CMakeFiles/nrcore.dir/all
 
 # Build rule for subdir invocation for target.

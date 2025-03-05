@@ -5,27 +5,27 @@
 
 class NRCore{
 private:
-    Graph *&G;
-    VertexSet *&R;
-    VertexSet *&A;
+    const Graph *G;
+    const VertexSet *R;
+    const VertexSet *A;
 
 
     std::vector<int> w;
     std::vector<int> ct; // contribution of each vertex
     std::vector<int> cn; // coreness of each vertex
-    std::vector<int> ord;
-    std::vector<int> pos;
 
     int k_max = 0;
     VertexSet nrcore;
 
-    void init();
     void bucketSort(std::vector<int> &beg_pos);
     void dec(int u, std::vector<int> &beg_pos, const int &head);
 public:
-    NRCore(Graph *&G_, VertexSet *&R_, VertexSet *&A_);
+    std::vector<int> ord;
+    std::vector<int> pos;
+    NRCore(const Graph *G_, const VertexSet *R_, const VertexSet *A_);
 
-    void nrCore();
+    void initCore();
+    void nrCore(Graph *&G_save, VertexSet *&R_save, VertexSet *&A_save);
 } ;
 
 #endif

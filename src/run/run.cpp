@@ -8,13 +8,6 @@
 #include <cassert>
 #include <cstdio>
 
-template<typename Arg> Arg *read(const argsController &ac, const std::string &arg_name) {
-    assert(ac.exist(arg_name));
-    Arg *arg = new Arg();
-    arg -> readFromText(ac[arg_name].c_str());
-    eprintf("FINISHED\tread from text\n");
-    return arg;
-}
 
 int main(int argc, char **argv) {
     argsController ac(argc, argv);
@@ -30,10 +23,13 @@ int main(int argc, char **argv) {
 
     if (use_core) {
         NRCore *C = new NRCore(G, R, A);
-        C -> nrCore();
+        C -> nrCore(G, R, A);
 
         eprintf("CORE GRAPH\tnew size = %d\n", G -> n);
 
+        write<Graph>(G, ac, "-gp");
+        write<VertexSet>(R, ac, "-rp");
+        write<VertexSet>(A, ac, "-ap");
         delete C;
     }
 
@@ -54,6 +50,11 @@ int main(int argc, char **argv) {
     printf("SOLVER\tdensity = %.10lf\n", solver -> best_rho);
 
     for (auto u: (solver -> densestSubgraph())) {
+        printf("%d ", u);
+    }
+    puts("");
+
+    for (auto u: (A -> list)) {
         printf("%d ", u);
     }
     puts("");

@@ -20,3 +20,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE fista)
 target_link_libraries(${PROJECT_NAME} PRIVATE fdp)
 target_link_libraries(${PROJECT_NAME} PRIVATE graph)
 target_link_libraries(${PROJECT_NAME} PRIVATE nrcore)
+
+add_executable(generator src/run/generator.cpp)
+target_link_libraries(generator PRIVATE 
+    graph
+)

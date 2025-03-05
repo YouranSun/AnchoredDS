@@ -45,6 +45,8 @@ dssolver.h
 /home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/fista.h
 ../graph/graph.h
 /home/yingli/work/AnchoredDS/AnchoredDS/src/graph/graph.h
+../nrcore/nrcore.h
+/home/yingli/work/AnchoredDS/AnchoredDS/src/nrcore/nrcore.h
 dssolver.h
 /home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/dssolver.h
 
@@ -57,6 +59,14 @@ tuple
 -
 
 /home/yingli/work/AnchoredDS/AnchoredDS/src/tools/utils.hpp
+getArgs.hpp
+/home/yingli/work/AnchoredDS/AnchoredDS/src/tools/getArgs.hpp
+assert.h
+-
+algorithm
+-
 cstdio
+-
+vector
 -
 

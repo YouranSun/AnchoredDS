@@ -3,7 +3,9 @@
 
 src/solvers/CMakeFiles/fista.dir/fista.cpp.o
  /home/yingli/work/AnchoredDS/AnchoredDS/src/graph/graph.h
+ /home/yingli/work/AnchoredDS/AnchoredDS/src/nrcore/nrcore.h
  /home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/dssolver.h
  /home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/fista.cpp
  /home/yingli/work/AnchoredDS/AnchoredDS/src/solvers/fista.h
+ /home/yingli/work/AnchoredDS/AnchoredDS/src/tools/getArgs.hpp
  /home/yingli/work/AnchoredDS/AnchoredDS/src/tools/utils.hpp

@@ -1,1 +1,2 @@
-./bin/AnchoredDS -g sample/sample_g.txt -r sample/sample_r.txt -a sample/sample_a.txt -d FDP -c
+./bin/AnchoredDS -g samples/com-lj.ungraph.txt -r samples/com-lj.ungraph-r.txt -a samples/com-lj.ungraph-a.txt -d FISTA -c -gp samples/com-lj.ungraph-p.txt -rp samples/com-lj.ungraph-rp.txt -ap samples/com-lj.ungraph-ap.txt
+# ./bin/AnchoredDS -g samples/com-lj.ungraph-p.txt -r samples/com-lj.ungraph-rp.txt -a samples/com-lj.ungraph-ap.txt -d FISTA

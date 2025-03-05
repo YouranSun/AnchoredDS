@@ -2,6 +2,7 @@
 #define FISTA_H
 
 #include "../graph/graph.h"
+#include "../nrcore/nrcore.h"
 #include "dssolver.h"
 
 class Fista : public DSSolver{

@@ -16,6 +16,8 @@ public:
 
     void readFromText(const char *input_path);
 
+    void writeToText(const char *output_path) const;
+
     VertexSet *induced_list(const VertexSet &V, const std::vector<int> &mapping) const;
 
     size_t size() const;
@@ -34,6 +36,8 @@ public:
 
     // To-do: check the 0-index or 1-index problem
     void readFromText(const char *input_path);
+
+    void writeToText(const char *output_path) const;
 
     Graph *induced_subgraph(const VertexSet &V, const std::vector<int> &mapping) const;
 } ;

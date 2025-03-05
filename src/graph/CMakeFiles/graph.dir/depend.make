@@ -3,5 +3,6 @@
 
 src/graph/CMakeFiles/graph.dir/graph.cpp.o: src/graph/graph.cpp
 src/graph/CMakeFiles/graph.dir/graph.cpp.o: src/graph/graph.h
+src/graph/CMakeFiles/graph.dir/graph.cpp.o: src/tools/getArgs.hpp
 src/graph/CMakeFiles/graph.dir/graph.cpp.o: src/tools/utils.hpp
 

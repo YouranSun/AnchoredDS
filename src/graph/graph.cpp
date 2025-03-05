@@ -31,8 +31,19 @@ void Graph::readFromText(const char *input_path) {
         int u, v; fscanf(input_file, "%d%d", &u, &v);
         edges[e] = std::make_pair(u, v);
     }
-
+    fclose(input_file);
+    
     init(n, m, edges);
+}
+
+void Graph::writeToText(const char *output_path) const {
+    FILE *output_file = fopen(output_path, "w");
+
+    fprintf(output_file, "%d %d\n", n, m);
+    for (auto [u, v]: edges) {
+        fprintf(output_file, "%d %d\n", u, v);
+    }
+    fclose(output_file);
 }
 
 Graph *Graph::induced_subgraph(const VertexSet &V, const std::vector<int> &mapping) const {
@@ -82,6 +93,18 @@ void VertexSet::readFromText(const char *input_path) {
         int u; fscanf(input_file, "%d", &u);
         list[i] = u;
     }
+    fclose(input_file);
 
     init(n, list);
+}
+
+void VertexSet::writeToText(const char *output_path) const {
+    FILE *output_file = fopen(output_path, "w");
+
+    fprintf(output_file, "%d %d\n", n, (int)size());
+    for (auto u: list) {
+        fprintf(output_file, "%d ", u);
+    }
+    fputs("", output_file);
+    fclose(output_file);
 }

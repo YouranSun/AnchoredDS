@@ -3,7 +3,7 @@
 #include "nrcore.h"
 #include "../tools/utils.hpp"
 
-NRCore::NRCore(Graph *&G_, VertexSet *&R_, VertexSet *&A_): G(G_), R(R_), A(A_){
+NRCore::NRCore(const Graph *G_, const VertexSet *R_, const VertexSet *A_): G(G_), R(R_), A(A_){
     cn = std::vector<int>((G -> n), 0);
     ct = std::vector<int>((G -> n), 0);
     ord = std::vector<int>((G -> n), 0);
@@ -45,7 +45,7 @@ void NRCore::dec(int u, std::vector<int> &beg_pos, const int &head) {
     --ct[u];
 }
 
-void NRCore::init() { // to calculate the initial contribution of each vertex and sort by bucket
+void NRCore::initCore() { // to calculate the initial contribution of each vertex and sort by bucket
     for (int e = 0; e < (G -> m); ++e) {
         int u = (G -> edges)[e].first, v = (G -> edges)[e].second;
         w[e] = ((R -> in)[u]) + ((R -> in)[v]);
@@ -89,8 +89,8 @@ void NRCore::init() { // to calculate the initial contribution of each vertex an
     }
 }
 
-void NRCore::nrCore() {
-    init();
+void NRCore::nrCore(Graph *&G_save, VertexSet *&R_save, VertexSet *&A_save) {
+    initCore();
     // for (auto u: ord) {
     //     eprintf("(%d %d) ", u, ct[u]);
     // }
@@ -126,9 +126,15 @@ void NRCore::nrCore() {
 
     nrcore.init(G -> n, core_list);
 
-    Graph *G_old = G; G = G -> induced_subgraph(nrcore, mapping); delete G_old;
-    VertexSet *R_old = R; R = R -> induced_list(nrcore, mapping); delete R_old;
-    VertexSet *A_old = A; A = A -> induced_list(nrcore, mapping); delete A_old;
+    Graph *G_old = G_save;
+    VertexSet *R_old = R_save;
+    VertexSet *A_old = A_save;
+    G_save = G -> induced_subgraph(nrcore, mapping);
+    R_save = R -> induced_list(nrcore, mapping);
+    A_save = A -> induced_list(nrcore, mapping);
+    delete G_old;
+    delete R_old;
+    delete A_old;
 
     return;
 }
