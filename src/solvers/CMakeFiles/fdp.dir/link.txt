@@ -1,2 +1,0 @@
-/usr/bin/ar qc libfdp.a  CMakeFiles/fdp.dir/fdp.cpp.o
-/usr/bin/ranlib libfdp.a

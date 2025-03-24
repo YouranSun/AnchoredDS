@@ -89,26 +89,36 @@ void NRCore::initCore() { // to calculate the initial contribution of each verte
     }
 }
 
-void NRCore::nrCore(Graph *&G_save, VertexSet *&R_save, VertexSet *&A_save) {
+void NRCore::nrCore(Graph *&G_save, VertexSet *&R_save, VertexSet *&A_save, double rho) {
     initCore();
     // for (auto u: ord) {
     //     eprintf("(%d %d) ", u, ct[u]);
     // }
     // eputs("");
 
-    for (int i = 0; i < (int)(ord.size()); ++i) {
-        // eprintf("(%d %d %d) ", ord[i], (int)(ord.size()) - i, ct[ord[i]]);
-        k_max = std::max(k_max, std::min((int)(ord.size()) - i, ct[ord[i]]));
+    if (rho == USE_K_MAX) {
+        for (int i = 0; i < (int)(ord.size()); ++i) {
+            // eprintf("(%d %d %d) ", ord[i], (int)(ord.size()) - i, ct[ord[i]]);
+            k_max = std::max(k_max, std::min((int)(ord.size()) - i, ct[ord[i]]));
+        }
+        
+        // eputs("");
+        eprintf("NRCORE\tk_max = %d\n", k_max);
+        rho = k_max;
     }
-    
-    // eputs("");
-    eprintf("NRCORE\tk_max = %d\n", k_max);
+
+    // double k_anchored = (k_max * k_max * 0.5) / (k_max * 0.5 + (int)(A -> size()));
 
     std::vector<int> core_list;
     for (int i = 0; i < (int)(ord.size()); ++i) {
-        if (ct[ord[i]] * 2 >= k_max) {
+        if (ct[ord[i]] * 2 >= rho) {
             for (int j = i; j < (int)(ord.size()); ++j) {
                 core_list.push_back(ord[j]);
+            }
+            for (auto u: (A -> list)) {
+                if (pos[u] < i) {
+                    core_list.push_back(u);
+                }
             }
             break;
         }
@@ -129,9 +139,14 @@ void NRCore::nrCore(Graph *&G_save, VertexSet *&R_save, VertexSet *&A_save) {
     Graph *G_old = G_save;
     VertexSet *R_old = R_save;
     VertexSet *A_old = A_save;
-    G_save = G -> induced_subgraph(nrcore, mapping);
     R_save = R -> induced_list(nrcore, mapping);
     A_save = A -> induced_list(nrcore, mapping);
+    G_save = G -> induced_subgraph(nrcore, mapping, R_save, A_save);
+    
+    // for (auto u: (R_save -> list)) printf("%d ", u); puts("");
+    // for (auto u: (A_save -> list)) printf("%d ", u); puts("");
+    // for (auto [u, v]: (G_save -> edges)) printf("(%d %d)\n", u, v); puts("");
+
     delete G_old;
     delete R_old;
     delete A_old;

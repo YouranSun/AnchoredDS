@@ -1,2 +1,0 @@
-/usr/bin/ar qc libfista.a  CMakeFiles/fista.dir/fista.cpp.o
-/usr/bin/ranlib libfista.a

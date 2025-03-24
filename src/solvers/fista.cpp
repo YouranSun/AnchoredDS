@@ -5,66 +5,73 @@
 #include <algorithm>
 #include <cmath>
 #include <cassert>
+#include <numeric>
 #include <tuple>
 #include <queue>
+#include<ext/pb_ds/priority_queue.hpp>
 
 Fista::~Fista(){}
 
-Fista::Fista(const Graph *G_, const VertexSet *R_, const VertexSet *A_) : DSSolver(G_, R_, A_) {
+Fista::Fista(const Graph *G_, const VertexSet *R_, const VertexSet *A_, const Setting &setting_):
+    DSSolver(G_, R_, A_, setting_) {
     m_R = 0;
-    w = std::vector<int>(G -> m);
+    calcW();
+
+    for (int u = 0; u < (G -> n); ++u) {
+        long long res = 0;
+        for (auto [v, e]: (G -> g)[u]) {
+            res += (w[e >> 1] > 0);
+        }
+        res = res * 2 * ((!(A -> in)[u]) + 1);
+        res = res * res;
+        // eprintf("u = %d res = %d\n", u, res);
+        m_R = m_R + res;
+    }
+
+    // delta = 0;
+    // for (int u = 0; u < (G -> n); ++u) {
+    //     delta = std::max(delta, (int)(G -> g)[u].size());
+    // }
+
+    // alpha = 0.25 / (((A -> size()) + 1) * sqrt(1ll * m_R * delta));
+    // alpha = 1.0 / (8 * ((A -> size()) + 1) * sqrt(1ll * m_R * delta));
+    // alpha = 0.25 / ((A -> size()) + 1);
+    // eprintf("m_R = %d\n", m_R);
+    alpha = 1.0 / sqrt(m_R);
+    eprintf("FISTA\talpha = %lf\n", alpha);
+}
+
+void Fista::calcW(){
+    w = std::vector<int>(G -> m, 0);
     for (int e = 0; e < (G -> m); ++e) {
         int u = (G -> edges)[e].first;
         int v = (G -> edges)[e].second;
         w[e] = (R -> in)[u] + (R -> in)[v];
-        m_R += w[e];
+        // m_R += w[e];
     }
-
-    // for (int u = 0; u < (G -> n); ++u) {
-    //     int res = 0;
-    //     for (auto [v, e]: (G -> g)[u]) {
-    //         res += (w[e >> 1] > 0);
-    //     }
-    //     res = res * 2 * ((!(A -> in)[u]) + 1);
-    //     res = res * res;
-    //     // eprintf("u = %d res = %d\n", u, res);
-    //     m_R = m_R + res;
-    // }
-
-    delta = 0;
-    for (int u = 0; u < (G -> n); ++u) {
-        delta = std::max(delta, (int)(G -> g)[u].size());
-    }
-
-    // alpha = 0.25 / (((A -> size()) + 1) * sqrt(1ll * m_R * delta));
-    alpha = 1.0 / (8 * ((A -> size()) + 1) * sqrt(1ll * m_R * delta));
-    eprintf("FISTA\talpha = %lf\n", alpha);
-    // alpha = 0.25 / ((A -> size()) + 1);
-    // eprintf("m_R = %d\n", m_R);
-    // alpha = 1.0 / (2 * sqrt(m_R));
 }
 
 void Fista::initSol() {
     a = std::vector<double>((G -> m) * 2, 0);
     r = std::vector<double>(G -> n, 0);
 
-    for (int e = 0; e < (G -> m); ++e) {
-        a[e << 1] += w[e] * 0.5;
-        a[e << 1 | 1] += w[e] * 0.5;
-    }
-
-    // NRCore *c = new NRCore(G, R, A);
     // for (int e = 0; e < (G -> m); ++e) {
-    //     int u = (G -> edges)[e].first;
-    //     int v = (G -> edges)[e].second;
-    //     if ((c -> pos)[u] > (c -> pos[v])) {
-    //         a[e << 1] = w[e];
-    //     }
-    //     else {
-    //         a[e << 1 | 1] = w[e];
-    //     }
+    //     a[e << 1] += w[e] * 0.5;
+    //     a[e << 1 | 1] += w[e] * 0.5;
     // }
-    // delete c;
+
+    NRCore *c = new NRCore(G, R, A);
+    for (int e = 0; e < (G -> m); ++e) {
+        int u = (G -> edges)[e].first;
+        int v = (G -> edges)[e].second;
+        if ((c -> pos)[u] > (c -> pos[v])) {
+            a[e << 1] = w[e];
+        }
+        else {
+            a[e << 1 | 1] = w[e];
+        }
+    }
+    delete c;
 }
 
 void Fista::calcR(const std::vector<double> &a) {
@@ -76,7 +83,7 @@ void Fista::calcR(const std::vector<double> &a) {
     }
 }
 
-int Fista::gradient(std::vector<int> &r_argmx) const {
+int Fista::subgradient(std::vector<int> &r_argmx) const {
     int r_nmx = 0;
     double r_mx = 0;
     for (int u = 0; u < (G -> n); ++u) {
@@ -96,22 +103,107 @@ int Fista::gradient(std::vector<int> &r_argmx) const {
     return r_nmx;
 }
 
-void Fista::descent(const std::vector<int> &r_argmx,
-                    const int &r_nmx,
-                    std::vector<double> &a_desc) const {
-    static double alpha_cur = alpha * 50;
-    alpha_cur = std::max(alpha_cur * pow(1.0 / 50, 1.0 / (T * 0.5)), alpha);
-    eprintf("FISTA\talpha_cur = %lf\n", alpha_cur);
-    double r_mx = r[r_argmx[0]];
-    double g = 1.0 / r_nmx;
-    // a_desc = a;
+void Fista::gradient(const double &g, const std::vector<double> &a,
+    std::vector<double> &nabla,
+    const std::vector<int> &r_argmx,
+    const int &r_nmx) const {
+    nabla = std::vector<double>((G -> m) * 2, 0);
     for (int u = 0; u < (G -> n); ++u) {
-        double d = 2 * ((!(A -> in)[u]) + (r[u] == r_mx) * (int)(A -> size()) * g) * r[u];
+        double d = 2 * ((!(A -> in)[u])) * r[u];
         for (auto [v, e]: (G -> g)[u]) {
-            a_desc[e] -= alpha_cur * d;
+            nabla[e] += d;
+        }
+    }
+    for (int i = 0; i < r_nmx; ++i) {
+        int u = r_argmx[i];
+        // eprintf("u = %d r = %lf\n", u, r[u]);
+        double d = 2 * ((int)(A -> size()) * g) * r[u];
+        for (auto [v, e]: (G -> g)[u]) {
+            // eprintf("a = %lf delta = %lf\n", a_desc[e], alpha_cur * d);
+            nabla[e] += d;
         }
     }
     return;
+}
+
+double norm2(const std::vector<double> &v) {
+    double ret = 0;
+    for (auto x: v) ret += x * x;
+    return ret;
+}
+
+double Fista::learningRate(const std::vector<double> &nabla) const {
+    static double z = 0, eta = alpha * 100000, pow_omega = 1;
+    const double beta = 0.999, smooth = 1e-8, omega = 0.95;
+    pow_omega = 1.0 * pow_omega * omega;
+    z = beta * z + (1 - beta) * norm2(nabla);
+    // eprintf("z = %lf\n", z);
+    eta = eta / (sqrt(z) + smooth) * pow_omega;
+    // eprintf("eta = %lf\n", eta);
+    // eta = std::max(eta, alpha);
+    // eprintf("eta = %lf alpha = %lf\n", eta, alpha);
+    return eta;
+
+}
+
+double Fista::learningRateAsynchronous() const {
+    static double z = alpha * 1024;
+    z = std::max(z * 0.8, alpha * 0.125);
+    return z;
+}
+
+void Fista::descent(const std::vector<int> &r_argmx,
+                    const int &r_nmx,
+                    std::vector<double> &a_desc, int &t) const {
+    double g = 1.0 / r_nmx;
+    std::vector<double> nabla((G -> m) * 2, 0);
+    gradient(g, a_desc, nabla, r_argmx, r_nmx);
+    double alpha_cur = learningRate(nabla);
+    // static double alpha_cur = alpha * 50;
+    // alpha_cur = std::max(2.0 /(t + 2), alpha);
+    // alpha_cur = std::max(alpha_cur * pow(1.0 / 50, 1.0 / (T * 0.5)), alpha);
+    // eprintf("FISTA\talpha_cur = %lf\n", alpha_cur);
+    double r_mx = r[r_argmx[0]];
+    // a_desc = a;
+    for (int i = 0; i < (G -> m) * 2; ++i) {
+        a_desc[i] -= nabla[i] * alpha_cur;
+    }
+    return;
+}
+
+void Fista::descentAsynchronous(const std::vector<int> &r_argmx,
+                            const int &r_nmx,
+                            const std::vector<double> &x_old,
+                            std::vector<double> &x_new,
+                            std::vector<double> &y,
+                            std::vector<double> &r,
+                            const double &tk, const double &tk_new) {
+    double g = 1.0 / r_nmx;
+    double r_mx = r[r_argmx[0]];
+    double alpha_cur = learningRateAsynchronous();
+    std::vector<int> e_ord((G -> m));
+    for (int e = 0; e < (G -> m); ++e) {
+        e_ord[e] = e;
+    }
+    shuffle(e_ord.begin(), e_ord.end(), rnd);
+
+    for (auto e: e_ord) {
+        int u = (G -> edges)[e].first, v = (G -> edges)[e].second;
+        double d1 = 2 * ((!(A -> in)[u]) + ((r[u] == r_mx) * (int)(A -> size()) * g)) * r[u];
+        double d2 = 2 * ((!(A -> in)[u]) + ((r[v] == r_mx) * (int)(A -> size()) * g)) * r[v];
+        double &p = x_new[e << 1], &q = x_new[e << 1 | 1];
+        r[u] -= p, r[v] -= q;
+        p -= d1 * alpha_cur;
+        q -= d2 * alpha_cur;
+        double d = p - q;
+        if (d > w[e]) p = w[e], q = 0;
+        else if (d < -w[e]) p = 0, q = w[e];
+        else p = (w[e] + d) * 0.5, q = (w[e] - d) * 0.5;
+        r[u] += p, r[v] += q;
+
+        y[e << 1 | 0] = x_new[e << 1 | 0] + (x_new[e << 1 | 0] + x_old[e << 1 | 0] * (-1)) * (1.0 * (tk - 1) / tk_new) + (x_new[e << 1 | 0] + y[e << 1 | 0] * (-1)) * (1.0 * tk / tk_new);
+        y[e << 1 | 1] = x_new[e << 1 | 1] + (x_new[e << 1 | 1] + x_old[e << 1 | 1] * (-1)) * (1.0 * (tk - 1) / tk_new) + (x_new[e << 1 | 1] + y[e << 1 | 1] * (-1)) * (1.0 * tk / tk_new);
+    }
 }
 
 void Fista::project(std::vector<double> &a_proj) const {
@@ -144,56 +236,137 @@ void Fista::fista() {
     std::vector<int> r_argmx(G -> n, 0);
 
     double tk = 1, tk_new = 1;
-    std::vector<double> a_proj_old = a;
-    std::vector<double> a_proj_new = a;
-    // std::vector<double> x_old = a;
-    // std::vector<double> y = a;
+    // std::vector<double> a_proj_old = a;
+    // std::vector<double> a_proj_new = a;
+    std::vector<double> x_old = a;
+    std::vector<double> y = a;
 
-    for (int t = 1; t <= T; ++t) {
+    for (int t = 1; t <= setting.T; ++t) {
+        a = y;
         calcR(a);
 
         // eprintf("t = %d\n", t);
+        // double desired = 0.0;
+        // double r_max = *max_element(r.begin(), r.end());
+        // for (int u = 0; u < (G -> n); ++u) {
+        //     if (!(A -> in)[u]) desired += 1.0 * r[u] * r[u];
+        //     else desired += 1.0 * r_max * r_max;
+        // }
+        // eprintf("r_max = %lf\n", r_max);
+        // eprintf("desired = %lf\n", desired);
         // for (int u = 0; u < (G -> n); ++u) {
         //     eprintf("(%d %lf) ", u, r[u]);
         // }
         // eputs("");
 
-        int r_nmx = gradient(r_argmx);
+        int r_nmx = subgradient(r_argmx);
 
-        a_proj_new = a;
-        descent(r_argmx, r_nmx, a_proj_new);
-        project(a_proj_new);
+        // a_proj_new = a;
+        // descent(r_argmx, r_nmx, a_proj_new);
+        // project(a_proj_new);
 
-        a = a_proj_new;
-        a = (a_proj_new * (t * 2 + 1) + a_proj_old * (1 - t)) * (1.0 / (t + 2));
-        a_proj_old = a_proj_new;
+        // a = a_proj_new;
+        // a = (a_proj_new * (t * 2 + 1) + a_proj_old * (1 - t)) * (1.0 / (t + 2));
+        // a_proj_old = a_proj_new;
 
-        // std::vector<double> x_new = y;
-        // descent(r_argmx, r_nmx, x_new);
+        std::vector<double> x_new = y;
         // project(x_new);
 
-        // tk_new = (1.0 + sqrt(1 + 4 * tk * tk)) / 2.0;
+        tk_new = (1.0 + sqrt(1 + 4 * tk * tk)) / 2.0;
         // y = x_new + (x_new + x_old * (-1)) * (1.0 * (tk - 1) / tk_new) + (x_new + y * (-1)) * (1.0 * tk / tk_new);
-        // x_old = x_new;
-        // tk = tk_new;
+
+        if (setting.is_asynchronous) {
+            descentAsynchronous(r_argmx, r_nmx, x_old, x_new, y, r, tk, tk_new);
+        }
+        else {
+            descent(r_argmx, r_nmx, x_new, t);
+            project(x_new);
+            y = x_new + (x_new + x_old * (-1)) * (1.0 * (tk - 1) / tk_new) + (x_new + y * (-1)) * (1.0 * tk / tk_new);
+        }
+        
+        x_old = x_new;
+        tk = tk_new;
+
+        a = x_old;
+        // a = a_proj_new;
+        if (pow(2, (int)log2(t)) == t) {
+            calcR(a);
+            findDS(t);
+            extractGraph(ds.back().rho);
+        }
+
+        if (setting.is_exact && t % setting.T_exact == 0) {
+            calcR(a);
+            findDS(t);
+            printf("t = %d rho = %lf err = %lf\n", t, ds.back().rho, ds.back().err);
+            if (!checkStable<double>(r, a, ord, level, (int)ds.back().vset.size())) {
+                puts("not stable");
+                continue;
+            }
+            puts("is stable");
+            if (isDensest(ds.back(), level)) break;
+        }
     }
-    // calcR(x_old);
-    calcR(a_proj_new);
 }
 
-void Fista::findDS() {
-    // for (int u = 0; u < (G -> n); ++u) eprintf("%.3lf ", r[u]); eputs("");
-    std::vector<int> ord(G -> n);
-    for (int u = 0; u < (G -> n); ++u) ord[u] = u;
-    std::sort(ord.begin(), ord.end(), [&](const int &u, const int &v) {
-        if ((A -> in)[u] != (A -> in)[v]) {
-            return (A -> in[u]) > (A -> in)[v];
+void Fista::fractionalPeeling(std::vector<int> &ord) const {
+    std::vector<double> r_ = r;
+    std::vector<int> vis((G -> n), 0);
+    __gnu_pbds::priority_queue<std::pair<double, int>,
+        std::greater<std::pair<double, int> > > que;
+
+    std::vector<__gnu_pbds::priority_queue<std::pair<double, int>,
+        std::greater<std::pair<double, int> > >::point_iterator> it(G -> n);
+
+    for (int u = 0; u < (G -> n); ++u) {
+        if (!(A -> in)[u]) {
+            it[u] = que.push(std::make_pair(r_[u], u));
         }
-        return r[u] > r[v];
-    });
+    }
+
+    for (int i = 0; i < (G -> n) - (A -> size()); ++i) {
+        int u = que.top().second;
+        que.pop();
+        vis[u] = true;
+        // eprintf("i = %d u = %d\n", i, u);
+        ord[i] = u;
+        
+        for (auto [v, e]: (G -> g)[u]) {
+            if (!vis[v] && !(A -> in)[v]) {
+                r_[v] -= a[e ^ 1];
+                que.modify(it[v], std::make_pair(r_[v], v));
+            }
+        }
+    }
+
+    for (int i = 0; i < (A -> size()); ++i) {
+        ord[(G -> n) - (A -> size()) + i] = (A -> list)[i];
+    }
+    reverse(ord.begin(), ord.end());
+}
+
+void Fista::findDS(int t) {
+    ord.resize(G -> n);
+    level.resize(G -> n);
+    // for (int u = 0; u < (G -> n); ++u) eprintf("%.3lf ", r[u]); eputs("");
+
+    double r_max = calcRMax(r);
+   
+    if (setting.is_fractional) {
+        fractionalPeeling(ord);
+    }
+    else {
+        for (int u = 0; u < (G -> n); ++u) ord[u] = u;
+        std::sort(ord.begin(), ord.end(), [&](const int &u, const int &v) {
+            if ((A -> in)[u] != (A -> in)[v]) {
+                return (A -> in[u]) > (A -> in)[v];
+            }
+            return r[u] > r[v];
+        });
+    }
+
     // for (int u = 0; u < (G -> n); ++u) eprintf("%d ", ord[u]); eputs("");
 
-    std::vector<int> level((G -> n), 0);
     for(int i = 0; i < ord.size(); i++) level[ord[i]] = i;
     
     std::vector<int> rPava((G -> n), 0);
@@ -206,7 +379,7 @@ void Fista::findDS() {
             rPava[level[e.second]] += w[i];
         }
     }
-    
+
     int cur_f = 0;
     best_rho = 0;
     best_g = 0;
@@ -221,13 +394,35 @@ void Fista::findDS() {
         }
     }
 
-    ds = std::vector<int>(best_g);
+    err = r_max / best_rho;
+
+    std::vector<int> cur_ds = std::vector<int>(best_g);
     for (int i = 0; i < best_g; ++i) {
-        ds[i] = ord[i];
+        cur_ds[i] = ord[i];
     }
+    ds.push_back(Solu(t, err, best_rho, cur_ds));
+}
+
+void Fista::extractGraph(const double &rho) {
+    NRCore *C = new NRCore(G, R, A);
+    C -> nrCore(G, R, A, rho);
+    eprintf("NRCORE\tnew graph size %d\n", (int)(G -> m));
+    delete C;
+    calcW();
+    initSol();
 }
 
 void Fista::solve() {
+    if (setting.use_core) {
+        NRCore *C = new NRCore(G, R, A);
+        C -> nrCore(G, R, A, NRCore::USE_K_MAX);
+
+        write<Graph>(G, setting.path_G_persistent);
+        write<VertexSet>(R, setting.path_R_persistent);
+        write<VertexSet>(A, setting.path_A_persistent);
+
+        delete C;
+    }
     fista();
-    findDS();
+    // findDS();
 }

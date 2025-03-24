@@ -18,6 +18,13 @@ template<typename T> T *read(const argsController &ac, const std::string &arg_na
     return arg;
 }
 
+template<typename T> T *read(const std::string &path) {
+    T *arg = new T();
+    arg -> readFromText(path.c_str());
+    eprintf("FINISHED\tread from text %s\n", path.c_str());
+    return arg;
+}
+
 template<typename T> void write(const T *instance, const argsController &ac, const std::string &arg_name) {
     // assert(ac.exist(arg_name));
     if (!ac.exist(arg_name)) {
@@ -26,6 +33,17 @@ template<typename T> void write(const T *instance, const argsController &ac, con
     }
     instance -> writeToText(ac[arg_name].c_str());
     eprintf("FINISHED\twrite to text %s\n", ac[arg_name].c_str());
+    return;
+}
+
+template<typename T> void write(const T *instance, const std::string &path) {
+    // assert(ac.exist(arg_name));
+    if (path == "") {
+        eprintf("FAILED\t-<%s> doesn't exist; writing failed\n", path.c_str());
+        return;
+    }
+    instance -> writeToText(path.c_str());
+    eprintf("FINISHED\twrite to text %s\n", path.c_str());
     return;
 }
 

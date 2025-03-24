@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <cstdio>
+#include <map>
 
 class VertexSet{
 private:
@@ -19,6 +20,7 @@ public:
     void writeToText(const char *output_path) const;
 
     VertexSet *induced_list(const VertexSet &V, const std::vector<int> &mapping) const;
+    void reorder(std::map<int, int> mapping) ;
 
     size_t size() const;
 } ;
@@ -32,14 +34,16 @@ public:
     std::vector<std::vector<std::pair<int, int> > > g;
     std::vector<std::pair<int, int> > edges;
 
-    void init(int n_, int m_, std::vector<std::pair<int, int> > edges_);
+    std::map<int, int> init(int n_, int m_, std::vector<std::pair<int, int> > edges_);
+
+    void shrink(VertexSet *R, VertexSet *A);
 
     // To-do: check the 0-index or 1-index problem
     void readFromText(const char *input_path);
 
     void writeToText(const char *output_path) const;
 
-    Graph *induced_subgraph(const VertexSet &V, const std::vector<int> &mapping) const;
+    Graph *induced_subgraph(const VertexSet &V, const std::vector<int> &mapping, VertexSet *R, VertexSet *A) const;
 } ;
 
 #endif

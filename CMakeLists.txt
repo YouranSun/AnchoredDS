@@ -12,6 +12,7 @@ set(EXECUTABLE_OUTPUT_PATH "bin/")
 add_subdirectory(src/solvers)
 add_subdirectory(src/graph)
 add_subdirectory(src/nrcore)
+add_subdirectory(src/run)
 
 add_executable(${PROJECT_NAME} src/run/run.cpp)
 
@@ -20,6 +21,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE fista)
 target_link_libraries(${PROJECT_NAME} PRIVATE fdp)
 target_link_libraries(${PROJECT_NAME} PRIVATE graph)
 target_link_libraries(${PROJECT_NAME} PRIVATE nrcore)
+target_link_libraries(${PROJECT_NAME} PRIVATE setting)
 
 add_executable(generator src/run/generator.cpp)
 target_link_libraries(generator PRIVATE 
