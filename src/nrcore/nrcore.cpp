@@ -4,23 +4,23 @@
 #include "../tools/utils.hpp"
 
 NRCore::NRCore(const Graph *G_, const VertexSet *R_, const VertexSet *A_): G(G_), R(R_), A(A_){
-    cn = std::vector<int>((G -> n), 0);
-    ct = std::vector<int>((G -> n), 0);
-    ord = std::vector<int>((G -> n), 0);
-    pos = std::vector<int>((G -> n), 0);
+    cn = std::vector<size_t>((G -> n), 0);
+    ct = std::vector<size_t>((G -> n), 0);
+    ord = std::vector<size_t>((G -> n), 0);
+    pos = std::vector<size_t>((G -> n), 0);
     w = std::vector<int> ((G -> m), 0);
 }
 
-void NRCore::bucketSort(std::vector<int> &beg_pos) {
-    std::vector<int> cnt(*std::max_element(ct.begin(), ct.end()) + 1);
-    for (int u = 0; u < (G -> n); ++u) {
+void NRCore::bucketSort(std::vector<size_t> &beg_pos) {
+    std::vector<size_t> cnt(*std::max_element(ct.begin(), ct.end()) + 1);
+    for (size_t u = 0; u < (G -> n); ++u) {
         ord[u] = u;
         ++cnt[ct[u]];
     }
-    for (int i = 1; i < (int)(cnt.size()); ++i) {
+    for (size_t i = 1; i < (cnt.size()); ++i) {
         cnt[i] += cnt[i - 1];
     }
-    for (int u = 0; u < (G -> n); ++u) {
+    for (size_t u = 0; u < (G -> n); ++u) {
         ord[pos[u] = --cnt[ct[u]]] = u;
     }
     // for (auto u: ord) {
@@ -34,8 +34,8 @@ void NRCore::bucketSort(std::vector<int> &beg_pos) {
     // eputs("");
 }
 
-void NRCore::dec(int u, std::vector<int> &beg_pos, const int &head) {
-    int v = ord[beg_pos[ct[u]]];
+void NRCore::dec(size_t u, std::vector<size_t> &beg_pos, const size_t &head) {
+    size_t v = ord[beg_pos[ct[u]]];
     std::swap(ord[pos[u]], ord[beg_pos[ct[u]]]);
     std::swap(pos[u], pos[v]);
     if (beg_pos[ct[u]] == head) {
@@ -46,12 +46,12 @@ void NRCore::dec(int u, std::vector<int> &beg_pos, const int &head) {
 }
 
 void NRCore::initCore() { // to calculate the initial contribution of each vertex and sort by bucket
-    for (int e = 0; e < (G -> m); ++e) {
-        int u = (G -> edges)[e].first, v = (G -> edges)[e].second;
+    for (size_t e = 0; e < (G -> m); ++e) {
+        size_t u = (G -> edges)[e].first, v = (G -> edges)[e].second;
         w[e] = ((R -> in)[u]) + ((R -> in)[v]);
     }
     
-    for (int u = 0; u < (G -> n); ++u) {
+    for (size_t u = 0; u < (G -> n); ++u) {
         ct[u] = 0;
         for (auto [v, e]: (G -> g)[u]) {
             ct[u] += w[e >> 1];
@@ -59,12 +59,12 @@ void NRCore::initCore() { // to calculate the initial contribution of each verte
         // eprintf("u = %d ct = %d\n", u, ct[u]);
     }
 
-    std::vector<int> beg_pos;
+    std::vector<size_t> beg_pos;
     std::vector<int> vis((G -> n), 0);
     bucketSort(beg_pos);
 
-    for (int i = 0; i < (G -> n); ++i) {
-        int u = ord[i];
+    for (size_t i = 0; i < (G -> n); ++i) {
+        size_t u = ord[i];
         // cn[u] = ct[u];
 
         // delete vertex u
@@ -97,9 +97,9 @@ void NRCore::nrCore(Graph *&G_save, VertexSet *&R_save, VertexSet *&A_save, doub
     // eputs("");
 
     if (rho == USE_K_MAX) {
-        for (int i = 0; i < (int)(ord.size()); ++i) {
-            // eprintf("(%d %d %d) ", ord[i], (int)(ord.size()) - i, ct[ord[i]]);
-            k_max = std::max(k_max, std::min((int)(ord.size()) - i, ct[ord[i]]));
+        for (size_t i = 0; i < (ord.size()); ++i) {
+            // eprintf("(%d %d %d) ", ord[i], (size_t)(ord.size()) - i, ct[ord[i]]);
+            k_max = std::max(k_max, std::min((ord.size()) - i, (size_t)ct[ord[i]]));
         }
         
         // eputs("");
@@ -109,10 +109,10 @@ void NRCore::nrCore(Graph *&G_save, VertexSet *&R_save, VertexSet *&A_save, doub
 
     // double k_anchored = (k_max * k_max * 0.5) / (k_max * 0.5 + (int)(A -> size()));
 
-    std::vector<int> core_list;
-    for (int i = 0; i < (int)(ord.size()); ++i) {
+    std::vector<size_t> core_list;
+    for (size_t i = 0; i < (size_t)(ord.size()); ++i) {
         if (ct[ord[i]] * 2 >= rho) {
-            for (int j = i; j < (int)(ord.size()); ++j) {
+            for (size_t j = i; j < (size_t)(ord.size()); ++j) {
                 core_list.push_back(ord[j]);
             }
             for (auto u: (A -> list)) {
@@ -129,8 +129,8 @@ void NRCore::nrCore(Graph *&G_save, VertexSet *&R_save, VertexSet *&A_save, doub
     // }
     // eputs("");
 
-    std::vector<int> mapping(G -> n);
-    for (int i = 0; i < (int)(core_list.size()); ++i) {
+    std::vector<size_t> mapping(G -> n);
+    for (size_t i = 0; i < (size_t)(core_list.size()); ++i) {
         mapping[core_list[i]] = i;
     }
 

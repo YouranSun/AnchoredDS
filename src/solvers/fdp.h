@@ -5,8 +5,8 @@
 
 class FDP: public DSSolver {
 private:
-    std::vector<unsigned int> r;
-    std::vector<unsigned int> a;
+    std::vector<size_t> r;
+    std::vector<size_t> a;
 public:
 
     ~FDP() override;

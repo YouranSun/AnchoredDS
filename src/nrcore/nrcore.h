@@ -11,19 +11,19 @@ private:
 
 
     std::vector<int> w;
-    std::vector<int> ct; // contribution of each vertex
-    std::vector<int> cn; // coreness of each vertex
+    std::vector<size_t> ct; // contribution of each vertex
+    std::vector<size_t> cn; // coreness of each vertex
 
-    int k_max = 0;
+    size_t k_max = 0;
     VertexSet nrcore;
 
-    void bucketSort(std::vector<int> &beg_pos);
-    void dec(int u, std::vector<int> &beg_pos, const int &head);
+    void bucketSort(std::vector<size_t> &beg_pos);
+    void dec(size_t u, std::vector<size_t> &beg_pos, const size_t &head);
 public:
     static constexpr double USE_K_MAX = -1.0;
 
-    std::vector<int> ord;
-    std::vector<int> pos;
+    std::vector<size_t> ord;
+    std::vector<size_t> pos;
     NRCore(const Graph *G_, const VertexSet *R_, const VertexSet *A_);
 
     void initCore();

@@ -10,9 +10,9 @@ public:
     int t;
     double err;
     double rho;
-    std::vector<int> vset;
+    std::vector<size_t> vset;
     Solu();
-    Solu(int t_, const double err_, const double rho_, const std::vector<int> &vset_);
+    Solu(int t_, const double err_, const double rho_, const std::vector<size_t> &vset_);
 } ;
 
 class DSSolver{
@@ -22,8 +22,8 @@ protected:
     VertexSet *A;
 
     std::vector<int> w;
-    std::vector<int> ord;
-    std::vector<int> level;
+    std::vector<size_t> ord;
+    std::vector<size_t> level;
     std::vector<Solu> ds;
 
 public:
@@ -31,8 +31,8 @@ public:
 
     std::mt19937 rnd = std::mt19937(2226701);
 
-    int best_g;
-    int best_f;
+    size_t best_g;
+    size_t best_f;
     double err;
     double best_rho;
 
@@ -42,16 +42,16 @@ public:
 
     virtual void findDS(int t) = 0;
     virtual void solve() = 0;
-    std::vector<int> densestSubgraph() const;
+    std::vector<size_t> densestSubgraph() const;
     void printResults();
 
     double calcRMax(const std::vector<double> &r) const;
-    bool isDensest(const Solu &sol, const std::vector<int> &pos);
-    template<typename T> bool checkStable(const std::vector<T> &r, const std::vector<T> &a, const std::vector<int> &ord, const std::vector<int> pos, int ds_size);
+    bool isDensest(const Solu &sol, const std::vector<size_t> &pos);
+    template<typename T> bool checkStable(const std::vector<T> &r, const std::vector<T> &a, const std::vector<size_t> &ord, const std::vector<size_t> pos, size_t ds_size);
 } ;
 
 template<typename T>
-bool DSSolver::checkStable(const std::vector<T> &r, const std::vector<T> &a, const std::vector<int> &ord, const std::vector<int> pos, int ds_size) {
+bool DSSolver::checkStable(const std::vector<T> &r, const std::vector<T> &a, const std::vector<size_t> &ord, const std::vector<size_t> pos, size_t ds_size) {
     std::vector<T> r2 = r;
 
     T r_max = *max_element(r.begin(), r.end());
@@ -62,7 +62,7 @@ bool DSSolver::checkStable(const std::vector<T> &r, const std::vector<T> &a, con
     T minRHatS = r2[ord[0]];
     T maxRRight = 0;
 
-    for (int e = 0; e < (G -> m); ++e) {
+    for (size_t e = 0; e < (G -> m); ++e) {
         auto [u, v] = (G -> edges[e]);
         if(pos[u] < ds_size && pos[u] >= ds_size) {
             r2[u] -= a[e << 1];
@@ -74,11 +74,11 @@ bool DSSolver::checkStable(const std::vector<T> &r, const std::vector<T> &a, con
         }
     }
 
-    for(int i = 0; i < ds_size; i++) {
+    for(size_t i = 0; i < ds_size; i++) {
         minRHatS = std::min(minRHatS, r2[ord[i]]);
     }
 
-    for(int i = ds_size; i < (G -> n); i++) {
+    for(size_t i = ds_size; i < (G -> n); i++) {
         maxRRight = std::max(maxRRight, r2[ord[i]]);
     }
 

@@ -9,18 +9,18 @@ class VertexSet{
 private:
 
 public:
-    int n;
-    std::vector<int> list;
-    std::vector<int> in;
+    size_t n;
+    std::vector<size_t> list;
+    std::vector<size_t> in;
    
-    void init(int n_, std::vector<int> list_);
+    void init(size_t n_, std::vector<size_t> list_);
 
     void readFromText(const char *input_path);
 
     void writeToText(const char *output_path) const;
 
-    VertexSet *induced_list(const VertexSet &V, const std::vector<int> &mapping) const;
-    void reorder(std::map<int, int> mapping) ;
+    VertexSet *induced_list(const VertexSet &V, const std::vector<size_t> &mapping) const;
+    void reorder(std::map<size_t, size_t> mapping) ;
 
     size_t size() const;
 } ;
@@ -29,12 +29,12 @@ class Graph {
 private:
 
 public:
-    int n;
-    int m;
-    std::vector<std::vector<std::pair<int, int> > > g;
-    std::vector<std::pair<int, int> > edges;
+    size_t n;
+    size_t m;
+    std::vector<std::vector<std::pair<size_t, size_t> > > g;
+    std::vector<std::pair<size_t, size_t> > edges;
 
-    std::map<int, int> init(int n_, int m_, std::vector<std::pair<int, int> > edges_);
+    std::map<size_t, size_t> init(size_t n_, size_t m_, std::vector<std::pair<size_t, size_t> > edges_);
 
     void shrink(VertexSet *R, VertexSet *A);
 
@@ -43,7 +43,7 @@ public:
 
     void writeToText(const char *output_path) const;
 
-    Graph *induced_subgraph(const VertexSet &V, const std::vector<int> &mapping, VertexSet *R, VertexSet *A) const;
+    Graph *induced_subgraph(const VertexSet &V, const std::vector<size_t> &mapping, VertexSet *R, VertexSet *A) const;
 } ;
 
 #endif

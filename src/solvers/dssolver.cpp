@@ -4,7 +4,7 @@
 
 Solu::Solu(){};
 
-Solu::Solu(const int t_, const double err_, const double rho_, const std::vector<int> &vset_):
+Solu::Solu(const int t_, const double err_, const double rho_, const std::vector<size_t> &vset_):
     t(t_), err(err_), rho(rho_), vset(vset_) {}
 
 DSSolver::~DSSolver(){
@@ -22,16 +22,16 @@ DSSolver::DSSolver(const Graph *G_, const VertexSet *R_, const VertexSet *A_, co
     setting(setting_),
     err(1e18),
     best_rho(0),
-    ord(std::vector<int>(G -> n, 0)),
-    level(std::vector<int>(G -> n, 0)){}
+    ord(std::vector<size_t>(G -> n, 0)),
+    level(std::vector<size_t>(G -> n, 0)){}
 
 
-std::vector<int> DSSolver::densestSubgraph() const {
+std::vector<size_t> DSSolver::densestSubgraph() const {
     return ds.back().vset;
 }
 
 void DSSolver::printResults(){
-    for (int i = 0; i < ds.size(); ++i) {
+    for (size_t i = 0; i < ds.size(); ++i) {
         printf("t = %d density = %lf err = %lf\n", ds[i].t, ds[i].rho, ds[i].err);
         for (auto u: ds[i].vset) {
             printf("%d ", u);
@@ -58,8 +58,8 @@ double DSSolver::calcRMax(const std::vector<double> &r) const {
     
     double r_0 = *max_element(r.begin(), r.end());
 
-    for (int i = 0; i < (G -> n); ++i) {
-        int u = ord[i];
+    for (size_t i = 0; i < (G -> n); ++i) {
+        size_t u = ord[i];
         sum += r[u];
         if (1.0 * (i + 1) * i > sum) {
             flag = true;
@@ -77,29 +77,28 @@ double DSSolver::calcRMax(const std::vector<double> &r) const {
     return r_max;
 }
 
-bool DSSolver::isDensest(const Solu &sol, const std::vector<int> &pos) {
+bool DSSolver::isDensest(const Solu &sol, const std::vector<size_t> &pos) {
     typedef HLPP_noGlobal Network;
-    static std::vector<int> ids((G -> n))
-    ;
-    int v_tot = (int)sol.vset.size() + 2, e_tot = 0;
+    static std::vector<size_t> ids((G -> n));
+    size_t v_tot = sol.vset.size() + 2, e_tot = 0;
 
     for(auto [u, v] : (G -> edges)) {
-        if(pos[u] < (int)(sol.vset.size()) && pos[v] < (int)(sol.vset.size())) {
+        if(pos[u] < (int)(sol.vset.size()) && pos[v] < (sol.vset.size())) {
             ++e_tot;
         }
     }
-    e_tot = (int)(sol.vset.size()) * 2 + e_tot * 2;
+    e_tot = (sol.vset.size()) * 2 + e_tot * 2;
 
-    for(int i = 0; i < sol.vset.size(); i++) {
+    for(size_t i = 0; i < sol.vset.size(); i++) {
         ids[sol.vset[i]] = i;
     }
 
     std::vector<int> degR(G -> n);
     for(auto [u, v]: (G -> edges)) {
-        if ((R -> in)[u] && pos[v] < (int)(sol.vset.size())) {
+        if ((R -> in)[u] && pos[v] < (sol.vset.size())) {
             ++degR[ids[v]];
         }
-        if ((R -> in)[v] && pos[v] < (int)(sol.vset.size())) {
+        if ((R -> in)[v] && pos[v] < (sol.vset.size())) {
             ++degR[ids[u]];
         }
     }
@@ -117,7 +116,7 @@ bool DSSolver::isDensest(const Solu &sol, const std::vector<int> &pos) {
         }
     }
 
-    for (int e = 0; e < (int)(G -> edges).size(); ++e) {
+    for (size_t e = 0; e < (G -> edges).size(); ++e) {
         auto [u, v] = (G -> edges)[e];
         if((R -> in)[u]) {
             network.addEdge(ids[v], ids[u], w[e]);
@@ -133,5 +132,5 @@ bool DSSolver::isDensest(const Solu &sol, const std::vector<int> &pos) {
     }
 
     double flow = network.maxFlow();
-    return fabs(flow - sol.rho * (int)(sol.vset.size())) <=  1e-5;
+    return fabs(flow - sol.rho * (sol.vset.size())) <=  1e-5;
 }

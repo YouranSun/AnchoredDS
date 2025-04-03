@@ -27,12 +27,12 @@ def execute(prog, args, out = None):
 
 os.system("make -j4")
 g = name + ".txt"
-# st = name + "-st" + ".txt"
-# for t in range(10):
-#     seed = t
-#     r = name + "-r" + "-" + str(t) + ".txt"
-#     a = name + "-a" + "-" + str(t) + ".txt"
-#     execute("/bin/generator", {"g": g, "r": r, "a": a, "st": st, "seed": seed})
+st = name + "-st" + ".txt"
+for t in range(10):
+    seed = t
+    r = name + "-r" + "-" + str(t) + ".txt"
+    a = name + "-a" + "-" + str(t) + ".txt"
+    execute("/bin/generator", {"g": g, "r": r, "a": a, "st": st, "seed": seed})
 for t in range(10):
     seed = t
     r = name + "-r" + "-" + str(t) + ".txt"
