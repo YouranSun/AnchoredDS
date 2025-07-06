@@ -12,7 +12,7 @@ NRCore::NRCore(const Graph *G_, const VertexSet *R_, const VertexSet *A_): G(G_)
 }
 
 void NRCore::bucketSort(std::vector<size_t> &beg_pos) {
-    std::vector<size_t> cnt(*std::max_element(ct.begin(), ct.end()) + 1);
+    std::vector<size_t> cnt(*std::max_element(ct.begin(), ct.end()) + 1, 0);
     for (size_t u = 0; u < (G -> n); ++u) {
         ord[u] = u;
         ++cnt[ct[u]];
@@ -21,6 +21,7 @@ void NRCore::bucketSort(std::vector<size_t> &beg_pos) {
         cnt[i] += cnt[i - 1];
     }
     for (size_t u = 0; u < (G -> n); ++u) {
+        // eprintf("u = %d ct = %d\n", u, ct[u]);
         ord[pos[u] = --cnt[ct[u]]] = u;
     }
     // for (auto u: ord) {
@@ -103,19 +104,22 @@ void NRCore::nrCore(Graph *&G_save, VertexSet *&R_save, VertexSet *&A_save, doub
         }
         
         // eputs("");
-        eprintf("NRCORE\tk_max = %d\n", k_max);
+        // eprintf("NRCORE\tk_max = %d\n", k_max);
         rho = k_max;
+        rho = k_max * k_max / (2 * ((k_max) + (int)(A -> size())));
+        eprintf("k_max = %d rho = %lf\n", k_max, rho);
     }
 
     // double k_anchored = (k_max * k_max * 0.5) / (k_max * 0.5 + (int)(A -> size()));
 
     std::vector<size_t> core_list;
     for (size_t i = 0; i < (size_t)(ord.size()); ++i) {
-        if (ct[ord[i]] * 2 >= rho) {
+        if (ct[ord[i]] >= rho) {
             for (size_t j = i; j < (size_t)(ord.size()); ++j) {
                 core_list.push_back(ord[j]);
             }
             for (auto u: (A -> list)) {
+                // eprintf("u = %zu pos = %zu i = %zu\n", u, pos[u], i);
                 if (pos[u] < i) {
                     core_list.push_back(u);
                 }
@@ -124,17 +128,24 @@ void NRCore::nrCore(Graph *&G_save, VertexSet *&R_save, VertexSet *&A_save, doub
         }
     }
 
-    // for (auto u: core_list) {
+    // for (auto u: (A -> list)) {
     //     eprintf("%d ", u);
+    // }
+    // eputs("");
+    // for (auto u: core_list) {
+    //     eprintf("(%d %d) ", u, (A -> in)[u]);
     // }
     // eputs("");
 
     std::vector<size_t> mapping(G -> n);
-    for (size_t i = 0; i < (size_t)(core_list.size()); ++i) {
+    for (size_t i = 0; i < core_list.size(); ++i) {
         mapping[core_list[i]] = i;
     }
 
     nrcore.init(G -> n, core_list);
+    // eputs("nrcore");
+    // for (auto u: nrcore.list) eprintf("%d ", u); eputs("");
+    // for (auto u: mapping) eprintf("%d ", mapping[u]); eputs("");
 
     Graph *G_old = G_save;
     VertexSet *R_old = R_save;
@@ -142,10 +153,11 @@ void NRCore::nrCore(Graph *&G_save, VertexSet *&R_save, VertexSet *&A_save, doub
     R_save = R -> induced_list(nrcore, mapping);
     A_save = A -> induced_list(nrcore, mapping);
     G_save = G -> induced_subgraph(nrcore, mapping, R_save, A_save);
-    
-    // for (auto u: (R_save -> list)) printf("%d ", u); puts("");
-    // for (auto u: (A_save -> list)) printf("%d ", u); puts("");
-    // for (auto [u, v]: (G_save -> edges)) printf("(%d %d)\n", u, v); puts("");
+
+    // eputs("results");
+    // for (auto u: (R_save -> list)) eprintf("%d ", u); eputs("");
+    // for (auto u: (A_save -> list)) eprintf("%d ", u); eputs("");
+    // for (auto [u, v]: (G_save -> edges)) eprintf("(%d %d)\n", u, v); eputs("");
 
     delete G_old;
     delete R_old;

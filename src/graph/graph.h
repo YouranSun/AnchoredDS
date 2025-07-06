@@ -38,8 +38,7 @@ public:
 
     void shrink(VertexSet *R, VertexSet *A);
 
-    // To-do: check the 0-index or 1-index problem
-    void readFromText(const char *input_path);
+    std::map<size_t, size_t> readFromText(const char *input_path);
 
     void writeToText(const char *output_path) const;
 

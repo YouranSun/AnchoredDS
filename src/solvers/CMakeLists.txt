@@ -13,5 +13,11 @@ add_library(fista STATIC
     fista.h
 )
 
+add_library(fw STATIC
+    fw.cpp
+    fw.h
+)
+
 target_link_libraries(fista PRIVATE dssolver)
 target_link_libraries(fdp PRIVATE dssolver)
+target_link_libraries(fw PRIVATE dssolver)

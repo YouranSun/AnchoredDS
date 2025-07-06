@@ -127,7 +127,7 @@ std::vector<size_t> generateSt(Graph *G, std::string path) {
         size_t du = (G -> g)[u].size();
         if(du < 10) continue;
 
-        eprintf("GEN\tu=%d\n", u);
+        eprintf("GEN\tu=%zu\n", u);
 
         for (auto [v, e]: (G -> g)[u]) {
             isNei[v] = true;
@@ -162,6 +162,15 @@ std::vector<size_t> generateSt(Graph *G, std::string path) {
     return u_list;
 }
 
+
+std::string numberPath(std::string path, int number) {
+    std::filesystem::path orig_path(path);
+    std::string stem = orig_path.stem().string();   // 获取文件名主干（不含扩展名）
+    std::string extension = orig_path.extension().string(); // 获取扩展名（含点）
+    std::filesystem::path new_path = orig_path.parent_path() / (stem + "-" + std::to_string(number) + extension);
+    return new_path.string();
+}
+
 int main(int argc, char * argv[]) {
     argsController ac(argc, argv);
 
@@ -174,23 +183,27 @@ int main(int argc, char * argv[]) {
     std::vector<size_t> u_list = generateSt(G, ac["-st"]);
 
     int generateCntR = 254;
+    int testCasesCnt = 500;
 
     std::vector<int> vis(G -> n, 0);
     
-    int s = u_list[rnd() % (int)(u_list.size())];
-    std::vector<size_t> vA = generateA(G, s, 8, vis);
+    for (int tc = 0; tc < testCasesCnt; ++tc) {
+        eprintf("Generating Case %d\n", tc);
+        int s = u_list[rnd() % (int)(u_list.size())];
+        std::vector<size_t> vA = generateA(G, s, 8, vis);
 
 
-    int DEF_ANCHOR_REPEATS = rnd() % 8 + 2;
-    int STEPS = rnd() % 8 + 2;
-    std::vector<size_t> vR = generateR(
-        G, vA, DEF_ANCHOR_REPEATS, STEPS, vis);
+        int DEF_ANCHOR_REPEATS = rnd() % 8 + 2;
+        int STEPS = rnd() % 8 + 2;
+        std::vector<size_t> vR = generateR(
+            G, vA, DEF_ANCHOR_REPEATS, STEPS, vis);
 
-    VertexSet A; A.init(G -> n, vA);
-    VertexSet R; R.init(G -> n, vR);
+        VertexSet A; A.init(G -> n, vA);
+        VertexSet R; R.init(G -> n, vR);
 
-    A.writeToText(ac["-a"].c_str());
-    R.writeToText(ac["-r"].c_str());
+        A.writeToText(numberPath(ac["-a"], tc).c_str());
+        R.writeToText(numberPath(ac["-r"], tc).c_str());
+    }
 
     delete G;
     return 0;

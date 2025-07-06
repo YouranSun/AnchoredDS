@@ -2,12 +2,18 @@
 #define SETTING_H
 
 #include "../tools/getArgs.hpp"
+#include <ctime>
 
 class Setting {
 public:
+    clock_t start_time;
+    clock_t time_flow;
+    int cnt_flow;
+    
     int T;
     int T_exact;
     bool is_fista;
+    bool is_fw;
     bool use_core;
     bool is_exact;
     bool is_asynchronous;

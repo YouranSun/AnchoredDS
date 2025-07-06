@@ -4,6 +4,7 @@
 #include "../graph/graph.h"
 #include "../nrcore/nrcore.h"
 #include "dssolver.h"
+#include <ctime>
 #include <random>
 
 class Fista : public DSSolver{

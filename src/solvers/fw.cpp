@@ -1,13 +1,13 @@
-#include "fdp.h"
+#include "fw.h"
 #include "../tools/utils.hpp"
 
 #include <algorithm>
 #include <numeric>
 #include <cmath>
 
-FDP::~FDP(){}
+FW::~FW(){}
 
-FDP::FDP(const Graph *G_, const VertexSet *R_, const VertexSet *A_, const Setting &setting_):
+FW::FW(const Graph *G_, const VertexSet *R_, const VertexSet *A_, const Setting &setting_):
     DSSolver(G_, R_, A_, setting_) {
     w = std::vector<int>(G -> m, 0);
     for (size_t e = 0; e < (G -> m); ++e) {
@@ -17,41 +17,35 @@ FDP::FDP(const Graph *G_, const VertexSet *R_, const VertexSet *A_, const Settin
     }
 }
 
-void FDP::frankWolfe() { //run Frank-Wolfe
+void FW::frankWolfe() { //run Frank-Wolfe
     std::vector<size_t> ord_e;
     for (size_t e = 0; e < (G -> m); ++e) if (w[e] > 0){
         ord_e.push_back(e);
     }
     shuffle(ord_e.begin(), ord_e.end(), rnd);
-    r = std::vector<size_t>((G -> n) + 1);
-    if (setting.is_exact) {
-        a = std::vector<size_t>((G -> m) * 2 + 1);
-    }
+    r = std::vector<double>((G -> n) + 1);
+    a = std::vector<double>((G -> m) * 2 + 1);
     for(auto & v : r) v = 0;
 
     for(unsigned int t = 1; t <= setting.T; t++) {
-        size_t r_max = 0;
+        double r_max = 0, learning_rate = 2.0 / (t + 2);
         // for (unsigned int i = 0; i < (G -> m); ++i) {
-        for (auto i: ord_e) {
-            auto e = (G -> edges)[i];
-            if(r[e.first] < r[e.second]) {
-                r_max = std::max(r_max, r[e.first] + w[i]);
-                r[e.first] += w[i];
-                if (setting.is_exact) a[i << 1] += w[i];
-            }
-            else if(r[e.first] > r[e.second]) {
-                r_max = std::max(r_max, r[e.second] + w[i]);
-                r[e.second] += w[i];
-                if (setting.is_exact) a[i << 1 | 1] += w[i];
-            }
-            else {
-                r_max = std::max(r_max, r[e.first] + (w[i] + 1) / 2);
-                r[e.first] += (w[i] + 1) / 2;
-                if (setting.is_exact) a[i << 1] += (w[i] + 1) / 2;
-                r[e.second] += w[i] / 2;
-                if (setting.is_exact) a[i << 1 | 1] += w[i] / 2;
-            }
+        for (size_t u= 0; u < (G -> n); ++u) r[u] *= (1 - learning_rate);
+
+        for (size_t e = 0; e < (G -> m); ++e) {
+            auto [u, v] = (G -> edges)[e];
+            a[e << 1] *= (1 - learning_rate);
+            a[e << 1 | 1] *= (1 - learning_rate);
+            if (r[u] < r[v])
+                a[e << 1] += learning_rate * w[e], r[u] += learning_rate * w[e];
+            else
+                a[e << 1 | 1] += learning_rate * w[e], r[v] += learning_rate * w[e];
         }
+
+        for (size_t u = 0; u < (G -> n); ++u) {
+            r_max = std::max(r_max, r[u]);
+        }
+
         for(size_t u : (A -> list)) {
             r[u] = r_max;
         }
@@ -61,24 +55,24 @@ void FDP::frankWolfe() { //run Frank-Wolfe
         }
         if (1.0 * (clock() - setting.start_time) / CLOCKS_PER_SEC >= 10000 || (t >= 128 && ds.back().err <= 1.001)) break;
 
-        if (setting.is_exact && t % setting.T_exact == 0) {
-            findDS(t);
-            printf("t = %d rho = %lf err = %lf time = %lld\n", t, ds.back().rho, ds.back().err, clock() - setting.start_time);
-            if (!checkStable<size_t>(r, a, ord, level, ds.back().vset.size())) continue;
-            if (isDensest(ds.back(), level)) {
-                double vm = 0, rss = 0;
-                process_mem_usage(vm, rss);
-                printf("vm = %lf rss = %lf cnt_flow = %d time_flow = %lld\n", vm, rss, setting.cnt_flow, setting.time_flow);
-                break;
-            }
-        }
+        // if (setting.is_exact && t % setting.T_exact == 0) {
+        //     findDS(t);
+        //     printf("t = %d rho = %lf err = %lf time = %lld\n", t, ds.back().rho, ds.back().err, clock() - setting.start_time);
+        //     if (!checkStable<size_t>(r, a, ord, level, ds.back().vset.size())) continue;
+        //     if (isDensest(ds.back(), level)) {
+        //         double vm = 0, rss = 0;
+        //         process_mem_usage(vm, rss);
+        //         printf("vm = %lf rss = %lf cnt_flow = %d time_flow = %lld\n", vm, rss, setting.cnt_flow, setting.time_flow);
+        //         break;
+        //     }
+        // }
     }
 }
 
-void FDP::findDS(int t) {
+void FW::findDS(int t) {
     std::vector<double> r_real((G -> n));
     for (size_t i = 0; i < (G -> n); ++i) {
-        r_real[i] = r[i] / t;
+        r_real[i] = r[i];
     }
     double r_max = calcRMax(r_real);
 
@@ -143,6 +137,6 @@ void FDP::findDS(int t) {
     ds.push_back(Solu(t, err, best_rho, cur_ds, clock() - setting.start_time));
 }
 
-void FDP::solve() {
+void FW::solve() {
     frankWolfe();
 }

@@ -41,6 +41,7 @@ std::map<size_t, size_t> Graph::init(size_t n_, size_t m_, std::vector<std::pair
     g = std::vector<std::vector<std::pair<size_t, size_t> > > (n, std::vector<std::pair<size_t, size_t> >());
     for (size_t e = 0; e < m; ++e) {
         auto [u, v] = edges_[e];
+        // eprintf("u = %d v = %d ids = %d %d\n", u, v, ids[u], ids[v]);
         u = ids[u], v = ids[v];
         edges[e] = std::make_pair(u, v);
         g[u].push_back(std::make_pair(v, e << 1));
@@ -51,7 +52,7 @@ std::map<size_t, size_t> Graph::init(size_t n_, size_t m_, std::vector<std::pair
 
 
 
-void Graph::readFromText(const char *input_path) {
+std::map<size_t, size_t> Graph::readFromText(const char *input_path) {
     FILE *input_file = fopen(input_path, "r");
 
     size_t n, m;
@@ -63,7 +64,7 @@ void Graph::readFromText(const char *input_path) {
     }
     fclose(input_file);
     
-    init(n, m, edges);
+    return init(n, m, edges);
 }
 
 void Graph::writeToText(const char *output_path) const {
@@ -82,11 +83,20 @@ Graph *Graph::induced_subgraph(const VertexSet &V, const std::vector<size_t> &ma
     std::vector<std::pair<size_t, size_t> > edges_;
     for (auto e: edges) {
         if (V.in[e.first] && V.in[e.second]) {
+            // eprintf("%d %d (%d %d)\n", e.first, e.second, mapping[e.first], mapping[e.second]);
             edges_.push_back(std::make_pair(mapping[e.first], mapping[e.second]));
         }
     }
 
     std::map<size_t, size_t> ord = (G_ -> init(V.list.size(), edges_.size(), edges_));
+    for (auto u: (A -> list)) {
+        if (ord.find(u) == ord.end()) {
+            // eprintf("give %zu %zu\n", u, (G_ -> n));
+            size_t tot = ord.size();
+            ord[u] = tot;
+        }
+    }
+    (G_ -> g).resize(G_ -> n);
     R -> reorder(ord);
     A -> reorder(ord);
     return G_;
@@ -109,7 +119,7 @@ void VertexSet::init(size_t n_, std::vector<size_t> list_) {
     list = list_;
     in = std::vector<size_t>(n, 0);
     for (auto u: list) in[u] = true;
-    eprintf("VERTEXSET size = %zu\n", size());
+    // eprintf("VERTEXSET size = %zu\n", size());
     // for (auto u: list) eprintf("%d ", u); eputs("");
 }
 
@@ -119,11 +129,12 @@ VertexSet *VertexSet::induced_list(const VertexSet &V, const std::vector<size_t>
     VertexSet *V_ = new VertexSet();
     std::vector<size_t> list_;
     for (auto u: list) {
+        // eprintf("u = %d in = %d mapping = %d\n", u, V.in[u], mapping[u]);
         if (V.in[u]) {
             list_.push_back(mapping[u]);
         }
     }
-    V_ -> init(V.size(), list_);
+    V_ -> init(V.n, list_);
     return V_;
 }
 

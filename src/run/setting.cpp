@@ -4,6 +4,9 @@
 Setting::Setting(){}
 
 Setting::Setting(const argsController &ac) {
+    time_flow = 0;
+    cnt_flow = 0;
+
     if (ac.exist("-c")) use_core = true;
     else use_core = false;
 
@@ -13,6 +16,9 @@ Setting::Setting(const argsController &ac) {
     assert(ac.exist("-d"));
     if (ac["-d"] == "FISTA") is_fista = true;
     else is_fista = false;
+
+    if (ac["-d"] == "FW") is_fw = true;
+    else is_fw = false;
 
     if (ac.exist("-e")) is_exact = true;
     else is_exact = false;
