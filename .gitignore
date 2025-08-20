@@ -1,4 +1,6 @@
 bin/
+backup/
+scalability/
 results/
 logs/
 figures/
@@ -12,6 +14,12 @@ test.out
 *.log
 *.sh
 *.py
+*.log
+*.sh
+*.py
 *.a
 *.txt
+*.txt
 *.o
+expr.py
+run.sh

@@ -76,6 +76,18 @@ void Fista::initSol() {
 
     // for (int e = 0; e < (G -> m); ++e) eprintf("(%d %d) (%.3lf %.3lf)\n", (G -> edges)[e].first, (G -> edges)[e].second, a[e << 1], a[e << 1 | 1]);
     // for (int u = 0; u < (G -> n); ++u) eprintf("%.3lf ", r[u]); eputs("");
+        w[e] = (R -> in)[u] + (R -> in)[v];
+        // if ((c -> pos)[u] > (c -> pos[v])) {
+        //     a[e << 1] = w[e];
+        // }
+        // else {
+        //     a[e << 1 | 1] = w[e];
+        // }
+        a[e << 1] = a[e << 1 | 1] = w[e] * 0.5;
+    }
+
+    // for (int e = 0; e < (G -> m); ++e) eprintf("(%d %d) (%.3lf %.3lf)\n", (G -> edges)[e].first, (G -> edges)[e].second, a[e << 1], a[e << 1 | 1]);
+    // for (int u = 0; u < (G -> n); ++u) eprintf("%.3lf ", r[u]); eputs("");
     delete c;
 }
 
@@ -217,7 +229,7 @@ void Fista::project(std::vector<double> &a_proj) const {
         if (d > w[e]) x = w[e], y = 0;
         else if (d < -w[e]) x = 0, y = w[e];
         else x = (w[e] + d) * 0.5, y = (w[e] - d) * 0.5;
-        // eprintf("%lf %lf %d\n", x, y, w[e]);
+        // eprintf("x = %lf y = %lf w = %d\n", x, y, w[e]);
         assert(x >= 0 && y >= 0 && x + y == w[e]);
     }
 }
@@ -247,6 +259,7 @@ void Fista::fista() {
     std::vector<double> y = a;
 
     for (int t = 1; t <= setting.T; ++t) {
+        // eprintf("t = %d\n", t);
         // eprintf("t = %d\n", t);
         a = y;
         calcR(a);
@@ -278,16 +291,31 @@ void Fista::fista() {
         std::vector<double> x_new = y;
         // project(x_new);
 
-        tk_new = (1.0 + sqrt(1 + 4 * tk * tk)) / 2.0;
+        // tk_new = (1.0 + sqrt(1 + 4 * tk * tk)) / 2.0;
+        tk = t, tk_new = t + 2;
         // y = x_new + (x_new + x_old * (-1)) * (1.0 * (tk - 1) / tk_new) + (x_new + y * (-1)) * (1.0 * tk / tk_new);
 
         if (setting.is_asynchronous) {
             descentAsynchronous(r_argmx, r_nmx, x_old, x_new, y, r, tk, tk_new);
         }
         else {
+            // eprintf("t = %d\n", t);
+            // for (auto e = 0; e < (G -> m); ++e) {
+            //     eprintf("(%d %d) (x = %lf y = %lf) alpha = (%lf %lf) %d\n", (G -> edges[e]).first, (G -> edges[e]).second, (x_new[e << 1], x_new[e << 1 | 1]), (y[e << 1], y[e << 1 | 1]), w[e]);
+            // }
             descent(r_argmx, r_nmx, x_new, t);
             project(x_new);
+            // for (auto e = 0; e < ((G -> m) << 1); ++e) eprintf("%lf ", x_new[e]); eputs("");
+            // y = x_new + (x_new + y * (-1)) * (1.0 * (tk - 1) / tk_new);
+            // for (auto e = 0; e < ((G -> m) << 1); ++e) eprintf("%lf ", x_new[e]); eputs("");
             y = x_new + (x_new + x_old * (-1)) * (1.0 * (tk - 1) / tk_new) + (x_new + y * (-1)) * (1.0 * tk / tk_new);
+            // for (auto e = 0; e < (G -> m); ++e) {
+            //     eprintf("(%d %d) (x = %lf y = %lf) alpha = (%lf %lf) %d\n",
+            //         (G -> edges[e]).first, (G -> edges[e]).second,
+            //         x_new[e << 1], x_new[e << 1 | 1],
+            //         y[e << 1], y[e << 1 | 1],
+            //         w[e]);
+            // }
         }
         
         x_old = x_new;
@@ -301,16 +329,33 @@ void Fista::fista() {
             if (setting.use_core) {
                 extractGraph(ds.back().rho);
             }
+            if (setting.use_core) {
+                extractGraph(ds.back().rho);
+            }
         }
 
         if (setting.is_exact && t % setting.T_exact == 0) {
             calcR(a);
             findDS(t);
             printf("t = %d rho = %lf err = %lf time = %ld\n", t, ds.back().rho, ds.back().err, clock() - setting.start_time);
+            printf("t = %d rho = %lf err = %lf time = %ld\n", t, ds.back().rho, ds.back().err, clock() - setting.start_time);
             if (!checkStable<double>(r, a, ord, level, (int)ds.back().vset.size())) {
+                // puts("not stable");
                 // puts("not stable");
                 continue;
             }
+            // puts("is stable");
+            if (isDensest(ds.back(), level)) {
+                double vm = 0, rss = 0;
+                process_mem_usage(vm, rss);
+                printf("vm = %lf rss = %lf cnt_flow = %d time_flow = %lld\n", vm, rss, setting.cnt_flow, setting.time_flow);
+                break;
+            }
+        }
+
+        
+        if (1.0 * (clock() - setting.start_time) / CLOCKS_PER_SEC >= 10000) break;
+        if (!setting.is_exact && (t >= 128 && ds.back().err <= 1.001)) break;
             // puts("is stable");
             if (isDensest(ds.back(), level)) {
                 double vm = 0, rss = 0;
@@ -367,6 +412,8 @@ void Fista::findDS(int t) {
     level.resize(G -> n);
     // eprintf("FINDDS\n");
     // for (int e = 0; e < (G -> m); ++e) eprintf("(%d %d) %d %d (%.3lf %.3lf)\n", (G -> edges)[e].first, (G -> edges)[e].second, (R -> in)[(G -> edges[e]).first], (R -> in)[(G -> edges[e]).second], a[e << 1], a[e << 1 | 1]);
+    // eprintf("FINDDS\n");
+    // for (int e = 0; e < (G -> m); ++e) eprintf("(%d %d) %d %d (%.3lf %.3lf)\n", (G -> edges)[e].first, (G -> edges)[e].second, (R -> in)[(G -> edges[e]).first], (R -> in)[(G -> edges[e]).second], a[e << 1], a[e << 1 | 1]);
     // for (int u = 0; u < (G -> n); ++u) eprintf("%.3lf ", r[u]); eputs("");
 
     double r_max = calcRMax(r);
@@ -385,6 +432,7 @@ void Fista::findDS(int t) {
     }
 
     // for (int u = 0; u < (G -> n); ++u) eprintf("%d ", (A -> in)[u]); eputs("");
+    // for (int u = 0; u < (G -> n); ++u) eprintf("%d ", (A -> in)[u]); eputs("");
     // for (int u = 0; u < (G -> n); ++u) eprintf("%d ", ord[u]); eputs("");
 
     for(size_t i = 0; i < ord.size(); i++) level[ord[i]] = i;
@@ -392,6 +440,7 @@ void Fista::findDS(int t) {
     std::vector<size_t> rPava((G -> n), 0);
     for (int i = 0; i < (G -> m); ++i) {
         auto e = (G -> edges)[i];
+        // eprintf("%d %d %d %d %d\n", e.first, e.second, (R -> in)[e.first], (R -> in)[e.second], w[i]);
         // eprintf("%d %d %d %d %d\n", e.first, e.second, (R -> in)[e.first], (R -> in)[e.second], w[i]);
         if(level[e.first] > level[e.second]) {
             rPava[level[e.first]] += w[i];
@@ -406,6 +455,7 @@ void Fista::findDS(int t) {
     best_g = 0;
 
     for (size_t i = 0; i < ord.size(); ++i) {
+        // eprintf("u = %d %d rPava = %zu\n", ord[i], (R -> in)[ord[i]], rPava[i]);
         // eprintf("u = %d %d rPava = %zu\n", ord[i], (R -> in)[ord[i]], rPava[i]);
         cur_f += rPava[i];
     
@@ -423,22 +473,25 @@ void Fista::findDS(int t) {
         cur_ds[i] = ord[i];
     }
     ds.push_back(Solu(t, err, best_rho, cur_ds, clock() - setting.start_time));
+    ds.push_back(Solu(t, err, best_rho, cur_ds, clock() - setting.start_time));
 }
 
 void Fista::extractGraph(const double &rho) {
     NRCore *C = new NRCore(G, R, A);
     C -> nrCore(G, R, A, rho);
-    eprintf("NRCORE\tnew graph size %d %d\n", (int)(G -> n), (int)(G -> m));
+    // eprintf("NRCORE\tnew graph size %d %d\n", (int)(G -> n), (int)(G -> m));
     delete C;
     calcW();
+    // initSol();
     // initSol();
 }
 
 void Fista::solve() {
     if (setting.use_core || true) {
+    if (setting.use_core || true) {
         NRCore *C = new NRCore(G, R, A);
         C -> nrCore(G, R, A, NRCore::USE_K_MAX);
-        eprintf("NRCORE\tnew graph size %d %d\n", (int)(G -> n), (int)(G -> m));
+        // eprintf("NRCORE\tnew graph size %d %d\n", (int)(G -> n), (int)(G -> m));
 
         write<Graph>(G, setting.path_G_persistent);
         write<VertexSet>(R, setting.path_R_persistent);
