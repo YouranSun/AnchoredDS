@@ -76,15 +76,15 @@ void Fista::initSol() {
 
     // for (int e = 0; e < (G -> m); ++e) eprintf("(%d %d) (%.3lf %.3lf)\n", (G -> edges)[e].first, (G -> edges)[e].second, a[e << 1], a[e << 1 | 1]);
     // for (int u = 0; u < (G -> n); ++u) eprintf("%.3lf ", r[u]); eputs("");
-        w[e] = (R -> in)[u] + (R -> in)[v];
+        // w[e] = (R -> in)[u] + (R -> in)[v];
         // if ((c -> pos)[u] > (c -> pos[v])) {
         //     a[e << 1] = w[e];
         // }
         // else {
         //     a[e << 1 | 1] = w[e];
         // }
-        a[e << 1] = a[e << 1 | 1] = w[e] * 0.5;
-    }
+        // a[e << 1] = a[e << 1 | 1] = w[e] * 0.5;
+    // }
 
     // for (int e = 0; e < (G -> m); ++e) eprintf("(%d %d) (%.3lf %.3lf)\n", (G -> edges)[e].first, (G -> edges)[e].second, a[e << 1], a[e << 1 | 1]);
     // for (int u = 0; u < (G -> n); ++u) eprintf("%.3lf ", r[u]); eputs("");
@@ -355,7 +355,7 @@ void Fista::fista() {
 
         
         if (1.0 * (clock() - setting.start_time) / CLOCKS_PER_SEC >= 10000) break;
-        if (!setting.is_exact && (t >= 128 && ds.back().err <= 1.001)) break;
+        if (!setting.is_exact && (t >= 128 && ds.back().err <= 1.001)) {
             // puts("is stable");
             if (isDensest(ds.back(), level)) {
                 double vm = 0, rss = 0;
