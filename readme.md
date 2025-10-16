@@ -132,11 +132,3 @@ R.txt
 7 3
 2 3 4
 ```
-
-### Contact
-
-If you have any questions about the code or find any errors, please list them in the issue or contact us directly by email:
-
-yinglizhou@link.cuhk.edu.cn
-
-youransun@link.cuhk.edu.cn
